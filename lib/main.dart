@@ -1,6 +1,9 @@
 import 'package:ala_kosan/pages.dart/wrapper.dart';
+import 'package:ala_kosan/shared/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,22 +12,22 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Ala Kosan',
-      theme: ThemeData(
-        primaryColor: Colors.redAccent,
-        accentColor: Colors.yellowAccent,
-        scaffoldBackgroundColor: Color(0xffe5e5e5),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-              primary: Colors.redAccent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              )),
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus.unfocus(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Ala Kosan',
+        theme: ThemeData(
+          primaryColor: primaryColor,
+          accentColor: accentColor,
+          scaffoldBackgroundColor: backgroundColor,
+          elevatedButtonTheme: elevatedButtonStyle,
+          outlinedButtonTheme: outlineButtonStyle,
+          textTheme: GoogleFonts.poppinsTextTheme(),
         ),
+        home: Wrapper(),
       ),
-      home: Wrapper(),
     );
   }
 }

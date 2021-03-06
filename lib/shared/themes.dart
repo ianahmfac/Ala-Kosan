@@ -1,0 +1,38 @@
+import 'package:flutter/material.dart';
+
+const Color primaryColor = Colors.redAccent;
+const Color accentColor = Colors.yellowAccent;
+const Color backgroundColor = Color(0xffe5e5e5);
+
+ElevatedButtonThemeData elevatedButtonStyle = ElevatedButtonThemeData(
+  style: ElevatedButton.styleFrom(
+      primary: primaryColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      )),
+);
+
+OutlinedButtonThemeData outlineButtonStyle = OutlinedButtonThemeData(
+  style: OutlinedButton.styleFrom(
+    side: BorderSide(
+      color: primaryColor,
+      width: 1,
+    ),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+    ),
+  ),
+);
+
+TextStyle onBoardTitle(BuildContext context) =>
+    Theme.of(context).textTheme.headline5;
+TextStyle onBoardSubtitle(BuildContext context) =>
+    Theme.of(context).textTheme.subtitle2.copyWith(color: Colors.grey);
+TextStyle contentBody(BuildContext context) =>
+    Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 16);
+TextStyle contentTitle2(BuildContext context) =>
+    Theme.of(context).textTheme.headline4.copyWith(color: Colors.black);
+TextStyle contentTitle(BuildContext context) =>
+    Theme.of(context).textTheme.headline6;
+TextStyle buttonText(BuildContext context) =>
+    Theme.of(context).textTheme.button;

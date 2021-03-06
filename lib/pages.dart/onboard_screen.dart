@@ -1,7 +1,8 @@
 import 'package:ala_kosan/helpers/constants.dart';
 import 'package:ala_kosan/pages.dart/login_page.dart';
+import 'package:ala_kosan/shared/device.dart';
+import 'package:ala_kosan/shared/themes.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardScreen extends StatefulWidget {
@@ -51,7 +52,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
       body: Stack(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height * 0.8,
+            height: heightOfDevice(context) * 0.8,
             child: PageView.builder(
               controller: _pageController,
               onPageChanged: (value) {
@@ -61,7 +62,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
               },
               itemCount: _onboardInfo.length,
               itemBuilder: (context, index) => Container(
-                color: Colors.redAccent.withOpacity(0.8),
+                color: primaryColor.withOpacity(0.8),
                 child: Image.asset(_onboardInfo[index]["image"]),
               ),
             ),
@@ -75,10 +76,8 @@ class _OnboardScreenState extends State<OnboardScreen> {
                   child: TextButton(
                     child: Text(
                       "Skip ->",
-                      style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
+                      style: buttonText(context)
+                          .copyWith(color: Colors.white, fontSize: 16),
                     ),
                     onPressed: () {
                       _pageController.jumpToPage(_onboardInfo.length - 1);
@@ -92,9 +91,9 @@ class _OnboardScreenState extends State<OnboardScreen> {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(50)),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(35)),
               ),
-              height: MediaQuery.of(context).size.height * 0.3,
+              height: heightOfDevice(context) * 0.3,
               padding: const EdgeInsets.all(16),
               alignment: Alignment.center,
               child: Column(
@@ -105,14 +104,13 @@ class _OnboardScreenState extends State<OnboardScreen> {
                       children: [
                         Text(
                           _onboardInfo[_indexPage]["title"],
-                          style: GoogleFonts.poppins(fontSize: 18),
+                          style: onBoardTitle(context),
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(height: 8),
                         Text(
                           _onboardInfo[_indexPage]["subtitle"],
-                          style: GoogleFonts.poppins(
-                              fontSize: 14, color: Colors.grey),
+                          style: onBoardSubtitle(context),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -131,7 +129,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                               color: index == _indexPage
-                                  ? Colors.redAccent
+                                  ? primaryColor
                                   : Colors.grey,
                             ),
                           );
@@ -179,7 +177,7 @@ class RoundedIconButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Colors.redAccent,
+          color: primaryColor,
         ),
         padding: const EdgeInsets.all(8),
         child: InkWell(

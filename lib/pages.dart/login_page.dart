@@ -1,14 +1,11 @@
+import 'package:ala_kosan/helpers/constants.dart';
+import 'package:ala_kosan/pages.dart/signup_page.dart';
 import 'package:ala_kosan/shared/device.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/widgets/container_form.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
+class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,12 +15,14 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SafeArea(
+              bottom: false,
               child: Image.asset(
                 "assets/images/gummy-bed.png",
                 height: heightOfDevice(context) * 0.25,
                 width: double.infinity,
               ),
             ),
+            SizedBox(height: 32),
             Text(
               "Masuk",
               style: contentTitle2(context),
@@ -43,11 +42,21 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> {
-  GlobalKey _formKey = GlobalKey<FormState>();
-  GlobalKey _emailKey = GlobalKey<FormFieldState>();
-  GlobalKey _passwordKey = GlobalKey<FormFieldState>();
+  final _formKey = GlobalKey<FormState>();
+  final _emailKey = GlobalKey<FormFieldState>();
+  final _passwordKey = GlobalKey<FormFieldState>();
+
+  String _email;
+  String _password;
 
   bool _isSecure = true;
+
+  void _signIn() async {
+    FocusManager.instance.primaryFocus.unfocus();
+    if (!_formKey.currentState.validate()) return;
+    _formKey.currentState.save();
+    print("$_email \n $_password");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +74,24 @@ class _SignInFormState extends State<SignInForm> {
               autocorrect: false,
               decoration: InputDecoration(
                 hintText: "Your Email",
-                border: InputBorder.none,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: primaryColor.withOpacity(0.1),
               ),
+              onChanged: (value) async {
+                await Future.delayed(Duration(seconds: 1));
+                _emailKey.currentState.validate();
+              },
+              onSaved: (newValue) => _email = newValue,
+              validator: (value) {
+                if (value.trim().isEmpty) return "Email tidak boleh kosong";
+                if (!Constants.isValidEmail(value))
+                  return "Format email tidak valid";
+                return null;
+              },
             ),
           ),
           SizedBox(height: 12),
@@ -81,7 +106,12 @@ class _SignInFormState extends State<SignInForm> {
               enableSuggestions: false,
               decoration: InputDecoration(
                 hintText: "Your Password",
-                border: InputBorder.none,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                  borderSide: BorderSide.none,
+                ),
+                fillColor: primaryColor.withOpacity(0.1),
+                filled: true,
                 suffixIcon: IconButton(
                   icon: Icon(
                     _isSecure
@@ -96,6 +126,17 @@ class _SignInFormState extends State<SignInForm> {
                   },
                 ),
               ),
+              onChanged: (value) async {
+                await Future.delayed(Duration(seconds: 1));
+                _passwordKey.currentState.validate();
+              },
+              onSaved: (newValue) => _password = newValue,
+              validator: (value) {
+                if (value.trim().isEmpty) return "Password tidak boleh kosong";
+                if (value.length <= 8)
+                  return "Password setidaknya memiliki 8 karakter";
+                return null;
+              },
             ),
           ),
           SizedBox(height: 32),
@@ -103,7 +144,7 @@ class _SignInFormState extends State<SignInForm> {
             height: 50,
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: _signIn,
               child: Text(
                 "Sign In",
                 style: contentTitle(context).copyWith(color: Colors.white),
@@ -115,7 +156,8 @@ class _SignInFormState extends State<SignInForm> {
             height: 50,
             width: double.infinity,
             child: OutlinedButton(
-              onPressed: () {},
+              onPressed: () =>
+                  Navigator.pushNamed(context, SignUpPage.routeName),
               child: Text(
                 "Create Account",
                 style: contentTitle(context).copyWith(color: primaryColor),

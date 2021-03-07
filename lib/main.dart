@@ -1,3 +1,4 @@
+import 'package:ala_kosan/pages.dart/signup_page.dart';
 import 'package:ala_kosan/pages.dart/wrapper.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.poppinsTextTheme(),
         ),
         home: Wrapper(),
+        routes: {
+          SignUpPage.routeName: (ctx) => SignUpPage(),
+        },
       ),
     );
   }

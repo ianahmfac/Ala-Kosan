@@ -1,5 +1,5 @@
-import 'package:ala_kosan/pages.dart/signup_page.dart';
-import 'package:ala_kosan/pages.dart/wrapper.dart';
+import 'package:ala_kosan/pages/signup_page.dart';
+import 'package:ala_kosan/pages/wrapper.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

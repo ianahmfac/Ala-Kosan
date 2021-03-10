@@ -1,3 +1,4 @@
+import 'package:ala_kosan/pages/image_pick_page.dart';
 import 'package:ala_kosan/pages/signup_page.dart';
 import 'package:ala_kosan/pages/wrapper.dart';
 import 'package:ala_kosan/shared/themes.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         home: Wrapper(),
         routes: {
           SignUpPage.routeName: (ctx) => SignUpPage(),
+          ImagePickPage.routeName: (ctx) => ImagePickPage(),
         },
       ),
     );

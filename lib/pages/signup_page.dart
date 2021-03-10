@@ -1,4 +1,5 @@
 import 'package:ala_kosan/helpers/constants.dart';
+import 'package:ala_kosan/pages/image_pick_page.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/widgets/circle_icon_button.dart';
 import 'package:ala_kosan/widgets/container_form.dart';
@@ -59,6 +60,12 @@ class _SignUpFormState extends State<SignUpForm> {
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
     print("$_email - $_name - ${_fullNumber(_number)} - $_password");
+    Navigator.of(context).pushNamed(ImagePickPage.routeName, arguments: {
+      "email": _email,
+      "name": _name,
+      "number": _fullNumber(_number),
+      "password": _password,
+    });
   }
 
   String _fullNumber(String number) {

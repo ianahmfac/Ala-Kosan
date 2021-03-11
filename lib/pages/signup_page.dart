@@ -59,7 +59,6 @@ class _SignUpFormState extends State<SignUpForm> {
   void _signUp() async {
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
-    print("$_email - $_name - ${_fullNumber(_number)} - $_password");
     Navigator.of(context).pushNamed(ImagePickPage.routeName, arguments: {
       "email": _email,
       "name": _name,
@@ -221,7 +220,7 @@ class _SignUpFormState extends State<SignUpForm> {
               onSaved: (newValue) => _password = newValue,
               validator: (value) {
                 if (value.trim().isEmpty) return "Password tidak boleh kosong";
-                if (value.length <= 8)
+                if (value.length < 8)
                   return "Password setidaknya memiliki 8 karakter";
                 return null;
               },
@@ -265,7 +264,7 @@ class _SignUpFormState extends State<SignUpForm> {
               },
               validator: (value) {
                 if (value.trim().isEmpty) return "Password tidak boleh kosong";
-                if (value.length <= 8)
+                if (value.length < 8)
                   return "Password setidaknya memiliki 8 karakter";
                 if (value != _passwordController.text)
                   return "Password tidak sama";

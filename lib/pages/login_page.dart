@@ -1,9 +1,11 @@
 import 'package:ala_kosan/helpers/constants.dart';
 import 'package:ala_kosan/pages/signup_page.dart';
+import 'package:ala_kosan/services/auth_service.dart';
 import 'package:ala_kosan/shared/device.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/widgets/container_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -50,12 +52,24 @@ class _SignInFormState extends State<SignInForm> {
   String _password;
 
   bool _isSecure = true;
+  bool _isLoading = false;
 
   void _signIn() async {
     FocusManager.instance.primaryFocus.unfocus();
+    setState(() {
+      _isLoading = true;
+    });
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
-    print("$_email \n $_password");
+    try {
+      await AuthService.signInWithEmail(_email, _password);
+    } catch (e) {
+      showSnackbarError(context, e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -133,37 +147,46 @@ class _SignInFormState extends State<SignInForm> {
               onSaved: (newValue) => _password = newValue,
               validator: (value) {
                 if (value.trim().isEmpty) return "Password tidak boleh kosong";
-                if (value.length <= 8)
+                if (value.length < 8)
                   return "Password setidaknya memiliki 8 karakter";
                 return null;
               },
             ),
           ),
           SizedBox(height: 32),
-          SizedBox(
-            height: 50,
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _signIn,
-              child: Text(
-                "Sign In",
-                style: contentTitle(context).copyWith(color: Colors.white),
-              ),
-            ),
-          ),
+          (_isLoading)
+              ? Center(
+                  child: SpinKitFadingCircle(
+                    color: accentColor,
+                    size: 50,
+                  ),
+                )
+              : SizedBox(
+                  height: 50,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _signIn,
+                    child: Text(
+                      "Sign In",
+                      style:
+                          contentTitle(context).copyWith(color: Colors.white),
+                    ),
+                  ),
+                ),
           SizedBox(height: 16),
-          SizedBox(
-            height: 50,
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, SignUpPage.routeName),
-              child: Text(
-                "Create Account",
-                style: contentTitle(context).copyWith(color: primaryColor),
+          if (!_isLoading)
+            SizedBox(
+              height: 50,
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () =>
+                    Navigator.pushNamed(context, SignUpPage.routeName),
+                child: Text(
+                  "Create Account",
+                  style: contentTitle(context).copyWith(color: primaryColor),
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

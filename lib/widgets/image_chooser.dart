@@ -19,6 +19,9 @@ class _ImageChooserState extends State<ImageChooser> {
   void _selectAction() {
     showModalBottomSheet(
       context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
       builder: (context) => Padding(
         padding: const EdgeInsets.all(16.0),
         child: SafeArea(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const Color primaryColor = Colors.redAccent;
-const Color accentColor = Colors.yellowAccent;
+const Color accentColor = Colors.orange;
 const Color backgroundColor = Color(0xffe5e5e5);
 
 ElevatedButtonThemeData elevatedButtonStyle = ElevatedButtonThemeData(
@@ -36,3 +36,16 @@ TextStyle contentTitle(BuildContext context) =>
     Theme.of(context).textTheme.headline6;
 TextStyle buttonText(BuildContext context) =>
     Theme.of(context).textTheme.button;
+
+ScaffoldFeatureController showSnackbarError(BuildContext context, String msg) {
+  return ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        msg,
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.red,
+      behavior: SnackBarBehavior.floating,
+    ),
+  );
+}

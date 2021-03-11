@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:ala_kosan/pages/home_page.dart';
 import 'package:ala_kosan/services/auth_service.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/widgets/circle_icon_button.dart';

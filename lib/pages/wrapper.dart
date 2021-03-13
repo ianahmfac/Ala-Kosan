@@ -1,5 +1,5 @@
 import 'package:ala_kosan/pages/home_page.dart';
-import 'package:ala_kosan/pages/login_page.dart';
+import 'package:ala_kosan/pages/auth/login_page.dart';
 import 'package:ala_kosan/pages/onboard_screen.dart';
 import 'package:ala_kosan/services/auth_service.dart';
 import 'package:ala_kosan/shared/themes.dart';

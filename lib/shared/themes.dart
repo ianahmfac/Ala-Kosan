@@ -44,6 +44,7 @@ ScaffoldFeatureController showSnackbarError(BuildContext context, String msg) {
         msg,
         style: TextStyle(color: Colors.white),
       ),
+      duration: Duration(seconds: 1),
       backgroundColor: Colors.red,
       behavior: SnackBarBehavior.floating,
     ),

@@ -1,7 +1,7 @@
 import 'package:ala_kosan/helpers/constants.dart';
-import 'package:ala_kosan/pages/image_pick_page.dart';
+import 'package:ala_kosan/pages/auth/image_pick_page.dart';
 import 'package:ala_kosan/shared/themes.dart';
-import 'package:ala_kosan/widgets/circle_icon_button.dart';
+import 'package:ala_kosan/widgets/circle_back_button.dart';
 import 'package:ala_kosan/widgets/container_form.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,7 @@ class SignUpPage extends StatelessWidget {
           children: [
             SafeArea(
               bottom: false,
-              child: CircleIconButton(),
+              child: CircleBackButton(),
             ),
             SizedBox(height: 32),
             Text(
@@ -62,7 +62,7 @@ class _SignUpFormState extends State<SignUpForm> {
     Navigator.of(context).pushNamed(ImagePickPage.routeName, arguments: {
       "email": _email,
       "name": _name,
-      "number": _fullNumber(_number),
+      "phoneNumber": _fullNumber(_number),
       "password": _password,
     });
   }

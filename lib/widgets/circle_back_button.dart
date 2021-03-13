@@ -1,7 +1,7 @@
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:flutter/material.dart';
 
-class CircleIconButton extends StatelessWidget {
+class CircleBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipOval(

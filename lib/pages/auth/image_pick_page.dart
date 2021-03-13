@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:ala_kosan/services/auth_service.dart';
 import 'package:ala_kosan/shared/themes.dart';
-import 'package:ala_kosan/widgets/circle_icon_button.dart';
+import 'package:ala_kosan/widgets/circle_back_button.dart';
 import 'package:ala_kosan/widgets/image_chooser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -27,9 +27,14 @@ class _ImagePickPageState extends State<ImagePickPage> {
     setState(() {
       _isLoading = true;
     });
-    String image = _imageProfile != null ? _imageProfile.path : "";
     try {
-      await AuthService.signUp(_dataSignUp["email"], _dataSignUp["password"]);
+      await AuthService.signUp(
+        _dataSignUp["email"],
+        _dataSignUp["password"],
+        _dataSignUp["name"],
+        _dataSignUp["phoneNumber"],
+        _imageProfile,
+      );
       Navigator.of(context).popUntil((route) => route.isFirst);
     } catch (e) {
       showSnackbarError(context, e.toString());
@@ -56,7 +61,7 @@ class _ImagePickPageState extends State<ImagePickPage> {
           children: [
             SafeArea(
               bottom: false,
-              child: CircleIconButton(),
+              child: CircleBackButton(),
             ),
             SizedBox(height: 32),
             RichText(

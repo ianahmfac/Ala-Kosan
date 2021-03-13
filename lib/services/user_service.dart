@@ -10,7 +10,7 @@ class UserService {
       "email": user.email,
       "name": user.name,
       "phoneNumber": user.phoneNumber,
-      "imageUrl": user.imageUrl,
+      "imageUrl": user.imageUrl ?? "",
     });
   }
 

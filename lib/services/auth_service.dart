@@ -21,7 +21,8 @@ class AuthService {
   static Future<void> signUp(String email, String password, String name,
       String phoneNumber, File image) async {
     try {
-      String imageUrl = await UploadImageService.uploadAndGetImageUrl(image);
+      String imageUrl =
+          await UploadImageService.uploadAndGetImageUrl(email, image);
       UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       UserApp user = UserApp(
@@ -33,10 +34,10 @@ class AuthService {
       );
       UserService.setUser(user);
     } on FirebaseAuthException catch (e) {
-      UploadImageService.deleteImage(image.path);
+      UploadImageService.deleteImage(email);
       throw e.message;
     } catch (e) {
-      UploadImageService.deleteImage(image.path);
+      UploadImageService.deleteImage(email);
       throw Exception("Terjadi kesalahan, silahkan coba lagi nanti.");
     }
   }

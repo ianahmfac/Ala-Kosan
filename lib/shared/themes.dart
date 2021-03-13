@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 const Color primaryColor = Colors.redAccent;
 const Color accentColor = Colors.orange;
-const Color backgroundColor = Color(0xffe5e5e5);
 
 ElevatedButtonThemeData elevatedButtonStyle = ElevatedButtonThemeData(
   style: ElevatedButton.styleFrom(

@@ -4,6 +4,7 @@
    <application
         android:label="Ala Kosan"
         android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

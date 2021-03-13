@@ -32,7 +32,6 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primaryColor: primaryColor,
             accentColor: accentColor,
-            scaffoldBackgroundColor: backgroundColor,
             elevatedButtonTheme: elevatedButtonStyle,
             outlinedButtonTheme: outlineButtonStyle,
             textTheme: GoogleFonts.poppinsTextTheme(),

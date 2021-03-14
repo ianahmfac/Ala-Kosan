@@ -1,6 +1,9 @@
+import 'package:ala_kosan/models/city.dart';
 import 'package:ala_kosan/models/user_app.dart';
+import 'package:ala_kosan/providers/city_provider.dart';
 import 'package:ala_kosan/providers/user_provider.dart';
 import 'package:ala_kosan/shared/themes.dart';
+import 'package:ala_kosan/widgets/city_item.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   ScrollController _scrollController;
   double _scrollPosition;
   bool _isAppBarHasElevation = false;
+  Future _cityFuture;
 
   void _scrollListener() {
     setState(() {
@@ -29,11 +33,14 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
+    _cityFuture = Provider.of<CityProvider>(context, listen: false).getCities();
   }
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
+    final cities =
+        Provider.of<CityProvider>(context, listen: false).homePageCities;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -48,55 +55,12 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildHeader(user, context),
-                  SizedBox(height: 24),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Text(
-                      "Yuk, Cari di Kota Ini!",
-                      style: contentTitle(context).copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  SizedBox(
-                    height: 150,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      itemBuilder: (context, index) => Card(
-                        color: primaryColor,
-                        child: Container(
-                          height: 150,
-                          width: 150,
-                        ),
-                      ),
-                    ),
-                  ),
                   SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            "Rekomendasi Untukmu!",
-                            style: contentTitle(context).copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text("See All"),
-                          style: TextButton.styleFrom(
-                            primary: primaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _buildTitleSection(context, "Yuk, Cari di Kota Ini!", () {}),
+                  SizedBox(height: 8),
+                  _buildCityCard(cities),
+                  SizedBox(height: 16),
+                  _buildTitleSection(context, "Rekomendasi Untukmu!", () {}),
                   SizedBox(height: 8),
                   ...List.generate(
                     5,
@@ -121,6 +85,60 @@ class _HomePageState extends State<HomePage> {
                 size: 50,
               ),
             ),
+    );
+  }
+
+  Widget _buildTitleSection(
+      BuildContext context, String title, Function function) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: contentTitle(context).copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: function,
+            child: Text("See All"),
+            style: TextButton.styleFrom(
+              primary: primaryColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCityCard(List<City> cities) {
+    return SizedBox(
+      height: 150,
+      child: FutureBuilder(
+        future: _cityFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: SpinKitFadingCircle(
+                color: accentColor,
+                size: 50,
+              ),
+            );
+          }
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            scrollDirection: Axis.horizontal,
+            itemCount: cities.length,
+            itemBuilder: (context, index) {
+              final city = cities[index];
+              return CityItem(city: city);
+            },
+          );
+        },
+      ),
     );
   }
 

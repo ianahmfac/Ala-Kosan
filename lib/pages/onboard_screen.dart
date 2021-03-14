@@ -1,5 +1,4 @@
 import 'package:ala_kosan/helpers/constants.dart';
-import 'package:ala_kosan/pages/auth/login_page.dart';
 import 'package:ala_kosan/pages/wrapper.dart';
 import 'package:ala_kosan/shared/device.dart';
 import 'package:ala_kosan/shared/themes.dart';

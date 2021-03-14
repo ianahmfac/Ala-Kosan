@@ -3,6 +3,7 @@ import 'package:ala_kosan/pages/auth/image_pick_page.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/widgets/circle_back_button.dart';
 import 'package:ala_kosan/widgets/container_form.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -201,9 +202,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 filled: true,
                 suffixIcon: IconButton(
                   icon: Icon(
-                    _isSecure
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
+                    _isSecure ? EvaIcons.eyeOffOutline : EvaIcons.eyeOutline,
                     size: 20,
                   ),
                   onPressed: () {

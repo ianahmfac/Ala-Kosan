@@ -34,10 +34,10 @@ class AuthService {
       );
       UserService.setUser(user);
     } on FirebaseAuthException catch (e) {
-      UploadImageService.deleteImage(email);
+      UploadImageService.deleteImage(email, image);
       throw e.message;
     } catch (e) {
-      UploadImageService.deleteImage(email);
+      UploadImageService.deleteImage(email, image);
       throw Exception("Terjadi kesalahan, silahkan coba lagi nanti.");
     }
   }

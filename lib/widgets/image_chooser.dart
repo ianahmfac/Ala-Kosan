@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:ala_kosan/shared/themes.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -36,14 +37,14 @@ class _ImageChooserState extends State<ImageChooser> {
                   ),
                   Spacer(),
                   IconButton(
-                    icon: Icon(Icons.close),
+                    icon: Icon(EvaIcons.close),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
               ),
               SizedBox(height: 16),
               ListTile(
-                leading: Icon(Icons.camera_alt),
+                leading: Icon(EvaIcons.cameraOutline),
                 title: Text("Ambil dengan Kamera"),
                 onTap: () {
                   _pickImage();
@@ -51,7 +52,7 @@ class _ImageChooserState extends State<ImageChooser> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.image),
+                leading: Icon(EvaIcons.imageOutline),
                 title: Text("Pilih Melalui Galeri"),
                 onTap: () {
                   _pickImage(false);
@@ -60,7 +61,7 @@ class _ImageChooserState extends State<ImageChooser> {
               ),
               _imageFile != null
                   ? ListTile(
-                      leading: Icon(Icons.delete),
+                      leading: Icon(EvaIcons.trash2Outline),
                       title: Text("Hapus Foto"),
                       onTap: () {
                         setState(() {
@@ -100,7 +101,7 @@ class _ImageChooserState extends State<ImageChooser> {
         child: _imageFile != null
             ? null
             : Icon(
-                Icons.add_a_photo,
+                EvaIcons.camera,
                 color: Colors.white,
                 size: 100,
               ),

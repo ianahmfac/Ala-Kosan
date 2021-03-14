@@ -15,7 +15,8 @@ class UploadImageService {
     return "";
   }
 
-  static void deleteImage(String email) async {
+  static void deleteImage(String email, File image) async {
+    if (image == null) return;
     await _userProfileRef.child("$email.png").delete();
   }
 }

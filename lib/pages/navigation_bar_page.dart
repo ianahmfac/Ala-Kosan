@@ -28,6 +28,7 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
   void initState() {
     super.initState();
     Provider.of<UserProvider>(context, listen: false).getCurrentUser();
+    Provider.of<CityProvider>(context, listen: false).getCities();
   }
 
   @override

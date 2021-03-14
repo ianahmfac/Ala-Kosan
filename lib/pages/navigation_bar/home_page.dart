@@ -5,7 +5,6 @@ import 'package:ala_kosan/providers/user_provider.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/widgets/city_item.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +18,6 @@ class _HomePageState extends State<HomePage> {
   ScrollController _scrollController;
   double _scrollPosition;
   bool _isAppBarHasElevation = false;
-  Future _cityFuture;
 
   void _scrollListener() {
     setState(() {
@@ -33,7 +31,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
-    _cityFuture = Provider.of<CityProvider>(context, listen: false).getCities();
   }
 
   @override
@@ -116,30 +113,23 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildCityCard(List<City> cities) {
     return SizedBox(
-      height: 150,
-      child: FutureBuilder(
-        future: _cityFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: SpinKitFadingCircle(
-                color: accentColor,
-                size: 50,
-              ),
-            );
-          }
-          return ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            scrollDirection: Axis.horizontal,
-            itemCount: cities.length,
-            itemBuilder: (context, index) {
-              final city = cities[index];
-              return CityItem(city: city);
-            },
-          );
-        },
-      ),
-    );
+        height: 150,
+        child: cities.isNotEmpty
+            ? ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                scrollDirection: Axis.horizontal,
+                itemCount: cities.length,
+                itemBuilder: (context, index) {
+                  final city = cities[index];
+                  return CityItem(city: city);
+                },
+              )
+            : Center(
+                child: SpinKitFadingCircle(
+                  color: accentColor,
+                  size: 50,
+                ),
+              ));
   }
 
   Widget _buildHelloUser(UserApp user) {

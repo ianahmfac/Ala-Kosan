@@ -66,7 +66,6 @@ class _SignInFormState extends State<SignInForm> {
       await AuthService.signInWithEmail(_email, _password);
     } catch (e) {
       showSnackbarError(context, e.toString());
-    } finally {
       setState(() {
         _isLoading = false;
       });

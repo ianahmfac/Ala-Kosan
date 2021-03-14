@@ -38,7 +38,6 @@ class _ImagePickPageState extends State<ImagePickPage> {
       Navigator.of(context).popUntil((route) => route.isFirst);
     } catch (e) {
       showSnackbarError(context, e.toString());
-    } finally {
       setState(() {
         _isLoading = false;
       });

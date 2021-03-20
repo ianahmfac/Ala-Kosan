@@ -13,4 +13,8 @@ class CityProvider with ChangeNotifier {
       ..shuffle();
     notifyListeners();
   }
+
+  City findCityById(String id) {
+    return _cities.firstWhere((city) => city.id == id);
+  }
 }

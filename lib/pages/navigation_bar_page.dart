@@ -3,6 +3,7 @@ import 'package:ala_kosan/pages/navigation_bar/favorite_page.dart';
 import 'package:ala_kosan/pages/navigation_bar/home_page.dart';
 import 'package:ala_kosan/pages/navigation_bar/profile_page.dart';
 import 'package:ala_kosan/providers/city_provider.dart';
+import 'package:ala_kosan/providers/kosan_provider.dart';
 import 'package:ala_kosan/providers/user_provider.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -27,8 +28,13 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
   @override
   void initState() {
     super.initState();
+    init();
+  }
+
+  void init() {
     Provider.of<UserProvider>(context, listen: false).getCurrentUser();
     Provider.of<CityProvider>(context, listen: false).getCities();
+    Provider.of<KosanProvider>(context, listen: false).getKosan();
   }
 
   @override

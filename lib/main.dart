@@ -2,6 +2,7 @@ import 'package:ala_kosan/pages/auth/image_pick_page.dart';
 import 'package:ala_kosan/pages/auth/signup_page.dart';
 import 'package:ala_kosan/pages/wrapper.dart';
 import 'package:ala_kosan/providers/city_provider.dart';
+import 'package:ala_kosan/providers/kosan_provider.dart';
 import 'package:ala_kosan/providers/user_provider.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => CityProvider()),
+        ChangeNotifierProvider(create: (context) => KosanProvider()),
       ],
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus.unfocus(),

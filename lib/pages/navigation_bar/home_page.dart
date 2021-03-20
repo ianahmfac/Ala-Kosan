@@ -1,9 +1,10 @@
-import 'package:ala_kosan/models/city.dart';
 import 'package:ala_kosan/models/user_app.dart';
 import 'package:ala_kosan/providers/city_provider.dart';
+import 'package:ala_kosan/providers/kosan_provider.dart';
 import 'package:ala_kosan/providers/user_provider.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/widgets/city_item.dart';
+import 'package:ala_kosan/widgets/kosan_item.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -36,8 +37,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
-    final cities =
-        Provider.of<CityProvider>(context, listen: false).homePageCities;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -55,24 +54,12 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: 16),
                   _buildTitleSection(context, "Yuk, Cari di Kota Ini!", () {}),
                   SizedBox(height: 8),
-                  _buildCityCard(cities),
+                  _buildCityCard(),
                   SizedBox(height: 16),
                   _buildTitleSection(context, "Rekomendasi Untukmu!", () {}),
                   SizedBox(height: 8),
-                  ...List.generate(
-                    5,
-                    (index) => Card(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 8,
-                      ),
-                      color: primaryColor,
-                      child: Container(
-                        height: 70,
-                        width: double.infinity,
-                      ),
-                    ),
-                  ),
+                  listOfKosan(),
+                  SizedBox(height: 16),
                 ],
               ),
             )
@@ -84,6 +71,28 @@ class _HomePageState extends State<HomePage> {
             ),
     );
   }
+
+  Widget listOfKosan() => Consumer<KosanProvider>(
+        builder: (context, kosanProvider, child) {
+          final kosan = kosanProvider.kosan;
+          return kosan.isNotEmpty
+              ? Column(
+                  children: List.generate(
+                    kosan.length,
+                    (index) {
+                      final kosanItem = kosan[index];
+                      return KosanItem(kosanItem: kosanItem);
+                    },
+                  ),
+                )
+              : Center(
+                  child: SpinKitFadingCircle(
+                    color: accentColor,
+                    size: 50,
+                  ),
+                );
+        },
+      );
 
   Widget _buildTitleSection(
       BuildContext context, String title, Function function) {
@@ -111,12 +120,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildCityCard(List<City> cities) {
-    return SizedBox(
-        height: 150,
+  Widget _buildCityCard() {
+    return Consumer<CityProvider>(builder: (context, cityProvider, _) {
+      final cities = cityProvider.cities;
+      return SizedBox(
+        height: 200,
         child: cities.isNotEmpty
             ? ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                 scrollDirection: Axis.horizontal,
                 itemCount: cities.length,
                 itemBuilder: (context, index) {
@@ -129,7 +141,9 @@ class _HomePageState extends State<HomePage> {
                   color: accentColor,
                   size: 50,
                 ),
-              ));
+              ),
+      );
+    });
   }
 
   Widget _buildHelloUser(UserApp user) {

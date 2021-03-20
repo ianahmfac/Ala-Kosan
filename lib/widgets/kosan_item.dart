@@ -1,5 +1,6 @@
 import 'package:ala_kosan/models/city.dart';
 import 'package:ala_kosan/models/kosan.dart';
+import 'package:ala_kosan/pages/detail_kos.dart';
 import 'package:ala_kosan/providers/city_provider.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/shared/utils.dart';
@@ -13,12 +14,21 @@ class KosanItem extends StatelessWidget {
   final Kosan kosanItem;
 
   const KosanItem({Key key, @required this.kosanItem}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final City city = Provider.of<CityProvider>(context, listen: false)
         .findCityById(kosanItem.cityId);
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          DetailKos.routeName,
+          arguments: {
+            "id": kosanItem.id,
+            "cityName": city.city,
+          },
+        );
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(
           horizontal: 24,
@@ -28,73 +38,97 @@ class KosanItem extends StatelessWidget {
         width: double.infinity,
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: FadeInImage(
-                placeholder: AssetImage("assets/images/placeholder.png"),
-                image: NetworkImage(kosanItem.images[0]),
-                fit: BoxFit.cover,
-                height: double.infinity,
-                width: 120,
-              ),
-            ),
+            _buildImage(),
             SizedBox(width: 16),
             Expanded(
-              child: ListView(
-                physics: ClampingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     kosanItem.name,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: contentTitle(context).copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(height: 4),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        EvaIcons.pinOutline,
-                        size: 18,
-                      ),
-                      SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          kosanItem.address,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    convertCurrency(kosanItem.price) + " /bln",
-                    style: contentBody(context).copyWith(
-                      color: primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 4),
                   Wrap(
-                    runSpacing: -12,
+                    runSpacing: -8,
+                    spacing: 4,
                     children: [
-                      ChipType(text: kosanItem.type),
-                      SizedBox(width: 4),
                       ChipType(
                         text: city.city,
                         icon: EvaIcons.pinOutline,
                       ),
+                      ChipType(
+                        text: kosanItem.rating.toString(),
+                        icon: EvaIcons.star,
+                      ),
+                      ChipType(text: kosanItem.type),
                     ],
+                  ),
+                  Spacer(),
+                  RichText(
+                    text: TextSpan(
+                      text: convertCurrency(kosanItem.price),
+                      style: contentBody(context).copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: primaryColor,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: " / bulan",
+                          style:
+                              onBoardSubtitle(context).copyWith(fontSize: 14),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildImage() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Stack(
+        children: [
+          Hero(
+            tag: kosanItem.id,
+            child: FadeInImage(
+              placeholder: AssetImage("assets/images/placeholder.png"),
+              image: NetworkImage(kosanItem.images[0]),
+              fit: BoxFit.cover,
+              height: double.infinity,
+              width: 120,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Material(
+              color: Colors.white.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(100),
+              child: InkWell(
+                splashColor: accentColor.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(100),
+                onTap: () {},
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Icon(
+                    EvaIcons.heartOutline,
+                    color: accentColor,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

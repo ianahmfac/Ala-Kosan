@@ -60,16 +60,27 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
               gap: 4,
               tabs: [
                 GButton(
-                  icon: EvaIcons.homeOutline,
+                  icon: (_selectedIndex == 0)
+                      ? EvaIcons.home
+                      : EvaIcons.homeOutline,
                   text: "Home",
                 ),
-                GButton(icon: EvaIcons.bookOpenOutline, text: "Booked"),
                 GButton(
-                  icon: EvaIcons.heartOutline,
+                  icon: (_selectedIndex == 1)
+                      ? EvaIcons.bookOpen
+                      : EvaIcons.bookOpenOutline,
+                  text: "Booked",
+                ),
+                GButton(
+                  icon: (_selectedIndex == 2)
+                      ? EvaIcons.heart
+                      : EvaIcons.heartOutline,
                   text: "Favorite",
                 ),
                 GButton(
-                  icon: EvaIcons.personOutline,
+                  icon: (_selectedIndex == 3)
+                      ? EvaIcons.person
+                      : EvaIcons.personOutline,
                   text: "Profile",
                 ),
               ],

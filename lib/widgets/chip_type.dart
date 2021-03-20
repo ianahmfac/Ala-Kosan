@@ -18,7 +18,9 @@ class ChipType extends StatelessWidget {
             ? Colors.blue
             : (text.toLowerCase() == "wanita")
                 ? Colors.pink
-                : primaryColor;
+                : text.contains(RegExp("^[0-9]"))
+                    ? accentColor
+                    : primaryColor;
     return Chip(
       backgroundColor: color.withOpacity(0.1),
       label: Row(

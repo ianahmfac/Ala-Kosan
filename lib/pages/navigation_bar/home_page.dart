@@ -35,6 +35,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
@@ -74,7 +80,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget listOfKosan() => Consumer<KosanProvider>(
         builder: (context, kosanProvider, child) {
-          final kosan = kosanProvider.kosan;
+          final kosan = kosanProvider.listOfKosan;
           return kosan.isNotEmpty
               ? Column(
                   children: List.generate(

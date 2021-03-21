@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:ala_kosan/helpers/static_map.dart';
 import 'package:ala_kosan/models/kosan.dart';
 import 'package:ala_kosan/providers/kosan_provider.dart';
 import 'package:ala_kosan/shared/device.dart';
@@ -5,8 +8,10 @@ import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/shared/utils.dart';
 import 'package:ala_kosan/widgets/chip_type.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailKos extends StatefulWidget {
   static const routeName = "/detail-kos";
@@ -19,6 +24,7 @@ class _DetailKosState extends State<DetailKos> {
   String _id;
   String _cityName;
   int _indexImage = 0;
+  String _mapUrl;
 
   @override
   void didChangeDependencies() {
@@ -32,112 +38,255 @@ class _DetailKosState extends State<DetailKos> {
     _cityName = arg["cityName"];
   }
 
+  void _launchMap(double latitude, double longitude) async {
+    final String maps = Platform.isAndroid
+        ? "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude"
+        : "comgooglemaps://?saddr=&daddr=$latitude,$longitude&directionsmode=driving";
+    final String appleMaps = 'https://maps.apple.com/?q=$latitude,$longitude';
+
+    if (await canLaunch(maps)) {
+      await launch(maps);
+    } else if (await canLaunch(appleMaps)) {
+      await launch(appleMaps);
+    } else {
+      throw "Tidak dapat membuka Url";
+    }
+  }
+
+  void _launchWhatsapp(String phoneNumber) async {
+    try {
+      final url =
+          "https://api.whatsapp.com/send/?phone=$phoneNumber&text&app_absent=0";
+      if (await canLaunch(url)) {
+        await launch(url);
+      }
+    } catch (e) {
+      throw "Tidak dapat membuka WhatsApp";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Kosan kosan =
         Provider.of<KosanProvider>(context, listen: false).findKosanById(_id);
+    _mapUrl = Static.generateStaticMap(
+        latitude: kosan.latitude, longitude: kosan.longitude);
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: Stack(
+      body: Column(
         children: [
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildImageHeader(kosan),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Wrap(
-                        runSpacing: -8,
-                        spacing: 12,
-                        children: [
-                          ChipType(
-                            text: _cityName,
-                            icon: EvaIcons.pinOutline,
-                          ),
-                          ChipType(
-                            text: kosan.rating.toString(),
-                            icon: EvaIcons.star,
-                          ),
-                          ChipType(text: kosan.type),
-                        ],
-                      ),
-                      Text(
-                        kosan.name,
-                        style: contentTitle2(context),
-                      ),
-                      SizedBox(height: 4),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(EvaIcons.pinOutline),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              kosan.address,
-                              style: onBoardSubtitle(context)
-                                  .copyWith(fontSize: 16),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+          Expanded(
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  flexibleSpace: _buildImageHeader(kosan),
+                  expandedHeight: 350 - paddingSafeDevice(context).top,
                 ),
+                _buildSliverList(kosan, context),
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: double.infinity,
-              color: Colors.white,
-              padding: const EdgeInsets.all(16),
-              child: SafeArea(
-                top: false,
-                child: Row(
+          _buildInfoAndButtonBookNow(kosan, context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSliverList(Kosan kosan, BuildContext context) {
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Container(
-                        child: RichText(
-                          text: TextSpan(
-                            text: convertCurrency(kosan.price),
-                            style: contentTitle(context).copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: primaryColor,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: " / bulan",
-                                style: onBoardSubtitle(context)
-                                    .copyWith(fontSize: 14),
-                              ),
-                            ],
-                          ),
+                    Wrap(
+                      runSpacing: -8,
+                      spacing: 12,
+                      children: [
+                        ChipType(
+                          text: _cityName,
+                          icon: EvaIcons.pinOutline,
                         ),
-                      ),
+                        ChipType(text: kosan.type),
+                      ],
                     ),
-                    SizedBox(
-                      height: 50,
-                      width: widthOfDevice(context) * 0.35,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: Text("Book Now"),
-                      ),
-                    ),
+                    _buildTitleKosan(kosan, context),
+                    SizedBox(height: 8),
+                    _buildLocation(kosan, context),
                   ],
                 ),
               ),
-            ),
+            ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTitleKosan(Kosan kosan, BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                kosan.name,
+                style: contentTitle2(context).copyWith(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Row(
+                children: [
+                  ChipType(
+                    text: kosan.rating.toString(),
+                    icon: EvaIcons.star,
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      "${kosan.availableRoom} kamar tersedia",
+                      style: TextStyle(
+                        color:
+                            kosan.availableRoom < 3 ? Colors.red : Colors.green,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        IconButton(
+          icon: Icon(
+            EvaIcons.messageSquareOutline,
+            color: Colors.green,
+            size: 32,
+          ),
+          onPressed: () {
+            try {
+              _launchWhatsapp(kosan.ownerNumber);
+            } catch (e) {
+              showSnackbarError(context, e.toString());
+            }
+          },
+        )
+      ],
+    );
+  }
+
+  Widget _buildLocation(Kosan kosan, BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(EvaIcons.pinOutline),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                kosan.address,
+                style: onBoardSubtitle(context).copyWith(fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 8),
+        Card(
+          elevation: 8,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: InkWell(
+            onTap: () {
+              showAlert(context,
+                  child: CupertinoAlertDialog(
+                    title: Text("Ingin membuka MAPS?"),
+                    actions: [
+                      CupertinoButton(
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(color: primaryColor),
+                        ),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                      CupertinoButton(
+                        child: Text("Open Maps"),
+                        onPressed: () {
+                          try {
+                            Navigator.pop(context);
+                            _launchMap(kosan.latitude, kosan.longitude);
+                          } catch (e) {
+                            showSnackbarError(context, e.toString());
+                          }
+                        },
+                      ),
+                    ],
+                  ));
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: FadeInImage(
+                placeholder: AssetImage("assets/images/placeholder.png"),
+                image: NetworkImage(_mapUrl),
+                fit: BoxFit.cover,
+                height: 200,
+                width: double.infinity,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoAndButtonBookNow(Kosan kosan, BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        width: double.infinity,
+        color: Colors.white,
+        padding: const EdgeInsets.all(16),
+        child: SafeArea(
+          top: false,
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  child: RichText(
+                    text: TextSpan(
+                      text: convertCurrency(kosan.price),
+                      style: contentTitle(context).copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: primaryColor,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: " / bulan",
+                          style:
+                              onBoardSubtitle(context).copyWith(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 50,
+                width: widthOfDevice(context) * 0.35,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: Text("Book Now"),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

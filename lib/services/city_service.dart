@@ -12,6 +12,7 @@ class CityService {
               id: city.data()["id"],
               city: city.data()["city"],
               image: city.data()["image"],
+              desc: city.data()["description"],
             ))
         .toList();
     return cities;

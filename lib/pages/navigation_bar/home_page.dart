@@ -10,49 +10,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  ScrollController _scrollController;
-  double _scrollPosition;
-  bool _isAppBarHasElevation = false;
-
-  void _scrollListener() {
-    setState(() {
-      _scrollPosition = _scrollController.position.pixels;
-      _isAppBarHasElevation = _scrollPosition > 150 ? true : false;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-    _scrollController.addListener(_scrollListener);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        elevation: _isAppBarHasElevation ? 8 : 0,
+        elevation: 0,
         flexibleSpace: (user != null) ? _buildHelloUser(user) : null,
       ),
       body: (user != null)
           ? SingleChildScrollView(
               physics: ClampingScrollPhysics(),
-              controller: _scrollController,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

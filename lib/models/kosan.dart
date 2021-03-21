@@ -10,6 +10,7 @@ class Kosan {
   final List<String> images;
   final String type;
   final int price;
+  final String ownerNumber;
   final int availableRoom;
   final double rating;
   final double discount;
@@ -23,6 +24,7 @@ class Kosan {
     @required this.images,
     @required this.type,
     @required this.price,
+    @required this.ownerNumber,
     @required this.availableRoom,
     this.rating = 0.0,
     this.discount = 0.0,
@@ -38,6 +40,7 @@ class Kosan {
     List<String> images,
     String type,
     int price,
+    String ownerNumber,
     int availableRoom,
     double rating,
     double discount,
@@ -52,6 +55,7 @@ class Kosan {
       images: images ?? this.images,
       type: type ?? this.type,
       price: price ?? this.price,
+      ownerNumber: ownerNumber ?? this.ownerNumber,
       availableRoom: availableRoom ?? this.availableRoom,
       rating: rating ?? this.rating,
       discount: discount ?? this.discount,
@@ -74,6 +78,7 @@ List<Kosan> kosanDummy = [
       "https://images.unsplash.com/photo-1556911220-bff31c812dba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2035&q=80",
     ],
     type: "Campur",
+    ownerNumber: "6282189899888",
     availableRoom: 9,
     price: 1800000,
     rating: 4.97,
@@ -92,6 +97,7 @@ List<Kosan> kosanDummy = [
       "https://images.unsplash.com/photo-1598546720078-8659863bc47d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
     ],
     type: "Pria",
+    ownerNumber: "6282189899888",
     price: 2500000,
     availableRoom: 5,
     rating: 4.0,
@@ -111,6 +117,7 @@ List<Kosan> kosanDummy = [
     ],
     type: "Wanita",
     availableRoom: 1,
+    ownerNumber: "6282189899888",
     price: 1499000,
     rating: 3.5,
   ),

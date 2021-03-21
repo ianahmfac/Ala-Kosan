@@ -47,5 +47,10 @@
 	<string>Application would access camera</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Application would access microphobe</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+    	<string>googlechromes</string>
+    	<string>comgooglemaps</string>
+	</array>
 </dict>
 </plist>

@@ -11,7 +11,7 @@ class FacilityItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final path = "assets/images/";
+    final path = "assets/images";
     return SizedBox(
       width: double.infinity,
       child: Wrap(

@@ -25,4 +25,16 @@ class Constants {
         .hasMatch(email);
     return regex;
   }
+
+  static String googleMapsUrl(double latitude, double longitude) =>
+      "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude";
+
+  static String googleMapsUrlForApple(double latitude, double longitude) =>
+      "comgooglemaps://?saddr=&daddr=$latitude,$longitude&directionsmode=driving";
+
+  static String appleMapsUrl(double latitude, double longitude) =>
+      "https://maps.apple.com/?q=$latitude,$longitude";
+
+  static String whatsappApiUrl(String phoneNumber) =>
+      "https://api.whatsapp.com/send/?phone=$phoneNumber&text&app_absent=0";
 }

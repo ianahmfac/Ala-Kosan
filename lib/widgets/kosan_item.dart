@@ -17,8 +17,8 @@ class KosanItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final City city = Provider.of<CityProvider>(context, listen: false)
-        .findCityById(kosanItem.cityId);
+    final City city =
+        context.read<CityProvider>().findCityById(kosanItem.cityId);
     return InkWell(
       onTap: () {
         Navigator.of(context).pushNamed(

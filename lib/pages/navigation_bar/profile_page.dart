@@ -18,7 +18,7 @@ class ProfilePage extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Provider.of<UserProvider>(context, listen: false).userSignOut();
+                context.read<UserProvider>().userSignOut();
                 AuthService.signOut();
               },
               child: Text("Sign Out"),

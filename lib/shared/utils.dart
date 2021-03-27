@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 String convertCurrency(int price) {
@@ -15,4 +16,9 @@ void showAlert(BuildContext context, {@required child}) {
     context: context,
     builder: (context) => child,
   );
+}
+
+void statusBarBrightness({@required bool isDark}) {
+  SystemChrome.setSystemUIOverlayStyle(
+      isDark ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light);
 }

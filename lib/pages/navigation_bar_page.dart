@@ -32,9 +32,9 @@ class _NavigationBarPageState extends State<NavigationBarPage> {
   }
 
   void init() {
-    Provider.of<UserProvider>(context, listen: false).getCurrentUser();
-    Provider.of<CityProvider>(context, listen: false).getCities();
-    Provider.of<KosanProvider>(context, listen: false).getKosan();
+    context.read<UserProvider>().getCurrentUser();
+    context.read<CityProvider>().getCities();
+    context.read<KosanProvider>().getKosan();
   }
 
   @override

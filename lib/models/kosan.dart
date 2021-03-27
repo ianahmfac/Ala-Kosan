@@ -1,3 +1,4 @@
+import 'package:ala_kosan/models/facility.dart';
 import 'package:flutter/foundation.dart';
 
 class Kosan {
@@ -10,8 +11,10 @@ class Kosan {
   final List<String> images;
   final String type;
   final int price;
-  final String ownerNumber;
+  final String ownerId;
   final int availableRoom;
+  final Facility facility;
+  final String additionalInfo;
   final double rating;
   final double discount;
   Kosan({
@@ -24,8 +27,10 @@ class Kosan {
     @required this.images,
     @required this.type,
     @required this.price,
-    @required this.ownerNumber,
+    @required this.ownerId,
     @required this.availableRoom,
+    @required this.facility,
+    this.additionalInfo = "Tidak ada info tambahan.",
     this.rating = 0.0,
     this.discount = 0.0,
   });
@@ -40,8 +45,10 @@ class Kosan {
     List<String> images,
     String type,
     int price,
-    String ownerNumber,
+    String ownerId,
     int availableRoom,
+    Facility facility,
+    String additionalInfo,
     double rating,
     double discount,
   }) {
@@ -55,8 +62,10 @@ class Kosan {
       images: images ?? this.images,
       type: type ?? this.type,
       price: price ?? this.price,
-      ownerNumber: ownerNumber ?? this.ownerNumber,
+      ownerId: ownerId ?? this.ownerId,
       availableRoom: availableRoom ?? this.availableRoom,
+      facility: facility ?? this.facility,
+      additionalInfo: additionalInfo ?? this.additionalInfo,
       rating: rating ?? this.rating,
       discount: discount ?? this.discount,
     );
@@ -78,8 +87,22 @@ List<Kosan> kosanDummy = [
       "https://images.unsplash.com/photo-1556911220-bff31c812dba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2035&q=80",
     ],
     type: "Campur",
-    ownerNumber: "6282189899888",
+    ownerId: "LNCW0ce4yLXPac0d5OJg0dfEtZ63",
     availableRoom: 9,
+    facility: Facility(
+      hasAirConditioner: true,
+      hasBed: true,
+      hasCupboard: true,
+      isInnerToilet: true,
+      hasWifi: true,
+      hasWorkbench: false,
+      isIncludeElectricity: false,
+      hasParkingLot: true,
+    ),
+    additionalInfo:
+        """Terdiri dari 2 lantai, dan masing-masing lantai memiliki 6 kamar. Terdapat dapur umum yang dapat digunakan bersama-sama per lantai. 
+    
+Kosan ini dekat dengan wilayah perkantoran dan pusat perbelanjaan.""",
     price: 1800000,
     rating: 4.97,
   ),
@@ -97,8 +120,18 @@ List<Kosan> kosanDummy = [
       "https://images.unsplash.com/photo-1598546720078-8659863bc47d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
     ],
     type: "Pria",
-    ownerNumber: "6282189899888",
+    ownerId: "rDhkFqaE3aTUWClzQvcB89rtirI2",
     price: 2500000,
+    facility: Facility(
+      hasAirConditioner: true,
+      hasBed: true,
+      hasCupboard: false,
+      isInnerToilet: false,
+      hasWifi: true,
+      hasWorkbench: true,
+      isIncludeElectricity: false,
+      hasParkingLot: true,
+    ),
     availableRoom: 5,
     rating: 4.0,
   ),
@@ -117,7 +150,17 @@ List<Kosan> kosanDummy = [
     ],
     type: "Wanita",
     availableRoom: 1,
-    ownerNumber: "6282189899888",
+    ownerId: "MJwovYGW9SXEW2UC6GYOBH8b4ZB2",
+    facility: Facility(
+      hasAirConditioner: false,
+      hasBed: true,
+      hasCupboard: true,
+      isInnerToilet: true,
+      hasWifi: true,
+      hasWorkbench: true,
+      isIncludeElectricity: true,
+      hasParkingLot: false,
+    ),
     price: 1499000,
     rating: 3.5,
   ),

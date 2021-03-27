@@ -1,15 +1,22 @@
 import 'dart:io';
 
+import 'package:ala_kosan/helpers/constants.dart';
 import 'package:ala_kosan/helpers/static_map.dart';
 import 'package:ala_kosan/models/kosan.dart';
+import 'package:ala_kosan/models/user_app.dart';
 import 'package:ala_kosan/providers/kosan_provider.dart';
+import 'package:ala_kosan/providers/user_provider.dart';
 import 'package:ala_kosan/shared/device.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/shared/utils.dart';
 import 'package:ala_kosan/widgets/chip_type.dart';
+import 'package:ala_kosan/widgets/facility_item.dart';
+import 'package:ala_kosan/widgets/user_circle_avatar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,6 +32,7 @@ class _DetailKosState extends State<DetailKos> {
   String _cityName;
   int _indexImage = 0;
   String _mapUrl;
+  Future<UserApp> _owner;
 
   @override
   void didChangeDependencies() {
@@ -40,9 +48,9 @@ class _DetailKosState extends State<DetailKos> {
 
   void _launchMap(double latitude, double longitude) async {
     final String maps = Platform.isAndroid
-        ? "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude"
-        : "comgooglemaps://?saddr=&daddr=$latitude,$longitude&directionsmode=driving";
-    final String appleMaps = 'https://maps.apple.com/?q=$latitude,$longitude';
+        ? Constants.googleMapsUrl(latitude, longitude)
+        : Constants.googleMapsUrlForApple(latitude, longitude);
+    final String appleMaps = Constants.appleMapsUrl(latitude, longitude);
 
     if (await canLaunch(maps)) {
       await launch(maps);
@@ -55,8 +63,7 @@ class _DetailKosState extends State<DetailKos> {
 
   void _launchWhatsapp(String phoneNumber) async {
     try {
-      final url =
-          "https://api.whatsapp.com/send/?phone=$phoneNumber&text&app_absent=0";
+      final url = Constants.whatsappApiUrl(phoneNumber);
       if (await canLaunch(url)) {
         await launch(url);
       }
@@ -67,8 +74,8 @@ class _DetailKosState extends State<DetailKos> {
 
   @override
   Widget build(BuildContext context) {
-    final Kosan kosan =
-        Provider.of<KosanProvider>(context, listen: false).findKosanById(_id);
+    final Kosan kosan = context.read<KosanProvider>().findKosanById(_id);
+    _owner = context.read<UserProvider>().getOwner(kosan.ownerId);
     _mapUrl = Static.generateStaticMap(
         latitude: kosan.latitude, longitude: kosan.longitude);
     return Scaffold(
@@ -78,8 +85,22 @@ class _DetailKosState extends State<DetailKos> {
             child: CustomScrollView(
               slivers: [
                 SliverAppBar(
-                  flexibleSpace: _buildImageHeader(kosan),
+                  brightness: Brightness.dark,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: _buildImageHeader(kosan),
+                    collapseMode: CollapseMode.pin,
+                  ),
+                  pinned: true,
+                  actions: [
+                    IconButton(
+                      padding: const EdgeInsets.all(16),
+                      iconSize: 30,
+                      icon: Icon(EvaIcons.heartOutline),
+                      onPressed: () {},
+                    ),
+                  ],
                   expandedHeight: 350 - paddingSafeDevice(context).top,
+                  title: Text(kosan.name),
                 ),
                 _buildSliverList(kosan, context),
               ],
@@ -116,6 +137,29 @@ class _DetailKosState extends State<DetailKos> {
                     ),
                     _buildTitleKosan(kosan, context),
                     SizedBox(height: 8),
+                    Divider(),
+                    _buildFacility(context, kosan),
+                    SizedBox(height: 16),
+                    Divider(),
+                    _buildCardOwner(context),
+                    SizedBox(height: 16),
+                    Divider(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Info Tambahan",
+                          style: contentTitle(context),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          kosan.additionalInfo,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Divider(),
                     _buildLocation(kosan, context),
                   ],
                 ),
@@ -127,62 +171,107 @@ class _DetailKosState extends State<DetailKos> {
     );
   }
 
-  Widget _buildTitleKosan(Kosan kosan, BuildContext context) {
-    return Row(
+  Widget _buildFacility(BuildContext context, Kosan kosan) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                kosan.name,
-                style: contentTitle2(context).copyWith(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Row(
-                children: [
-                  ChipType(
-                    text: kosan.rating.toString(),
-                    icon: EvaIcons.star,
+        Text(
+          "Fasilitas Utama",
+          style: contentTitle(context),
+        ),
+        SizedBox(height: 4),
+        FacilityItem(
+          facility: kosan.facility,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCardOwner(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Pemilik Kos", style: contentTitle(context)),
+        SizedBox(height: 4),
+        Card(
+          elevation: 6,
+          child: FutureBuilder<UserApp>(
+            future: _owner,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final userOwner = snapshot.data;
+                return ListTile(
+                  leading: UserCircleAvatar(
+                    imageUrl: userOwner.imageUrl,
+                    circleRadius: 18,
                   ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      "${kosan.availableRoom} kamar tersedia",
-                      style: TextStyle(
-                        color:
-                            kosan.availableRoom < 3 ? Colors.red : Colors.green,
-                      ),
+                  title: Text(userOwner.name),
+                  subtitle: Text(userOwner.phoneNumber),
+                  trailing: IconButton(
+                    icon: Icon(
+                      EvaIcons.messageCircleOutline,
+                      color: accentColor,
                     ),
+                    onPressed: () => _launchWhatsapp(userOwner.phoneNumber),
                   ),
-                ],
-              ),
-            ],
+                );
+              } else if (snapshot.hasError) {
+                return Text("Tidak dapat memuat info owner");
+              }
+              return Center(
+                child: SpinKitFadingCircle(
+                  size: 50,
+                  color: accentColor,
+                ),
+              );
+            },
           ),
         ),
-        IconButton(
-          icon: Icon(
-            EvaIcons.messageSquareOutline,
-            color: Colors.green,
-            size: 32,
+      ],
+    );
+  }
+
+  Widget _buildTitleKosan(Kosan kosan, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          kosan.name,
+          style: contentTitle2(context).copyWith(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
-          onPressed: () {
-            try {
-              _launchWhatsapp(kosan.ownerNumber);
-            } catch (e) {
-              showSnackbarError(context, e.toString());
-            }
-          },
-        )
+        ),
+        Row(
+          children: [
+            ChipType(
+              text: kosan.rating.toString(),
+              icon: EvaIcons.star,
+            ),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                "${kosan.availableRoom} kamar tersedia",
+                style: TextStyle(
+                  color: kosan.availableRoom < 3 ? Colors.red : Colors.green,
+                ),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
 
   Widget _buildLocation(Kosan kosan, BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(
+          "Lokasi Kosan",
+          style: contentTitle(context),
+        ),
+        SizedBox(height: 4),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -307,32 +396,42 @@ class _DetailKosState extends State<DetailKos> {
                   _indexImage = value;
                 });
               },
-              itemBuilder: (context, index) => FadeInImage(
-                placeholder: AssetImage("assets/images/placeholder.png"),
-                image: NetworkImage(kosan.images[_indexImage]),
-                fit: BoxFit.cover,
-                height: 350,
-                width: double.infinity,
+              itemBuilder: (context, index) => Stack(
+                children: [
+                  FadeInImage(
+                    placeholder: AssetImage("assets/images/placeholder.png"),
+                    image: NetworkImage(kosan.images[_indexImage]),
+                    fit: BoxFit.cover,
+                    height: 350,
+                    width: double.infinity,
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Theme.of(context).scaffoldBackgroundColor,
+                            Colors.transparent,
+                            Colors.transparent,
+                            Colors.black54,
+                          ],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 100,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context).scaffoldBackgroundColor,
-                      Colors.transparent
-                    ],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                  ),
-                ),
-                padding: const EdgeInsets.all(16),
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: List.generate(kosan.images.length, (index) {
                     return AnimatedContainer(
@@ -343,13 +442,13 @@ class _DetailKosState extends State<DetailKos> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                         color:
-                            index == _indexImage ? primaryColor : Colors.white,
+                            index == _indexImage ? accentColor : Colors.white,
                       ),
                     );
                   }),
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),

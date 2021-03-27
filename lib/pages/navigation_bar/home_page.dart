@@ -5,6 +5,7 @@ import 'package:ala_kosan/providers/user_provider.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/widgets/city_item.dart';
 import 'package:ala_kosan/widgets/kosan_item.dart';
+import 'package:ala_kosan/widgets/user_circle_avatar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -13,10 +14,11 @@ import 'package:provider/provider.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context).user;
+    final user = context.watch<UserProvider>().user;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        brightness: Brightness.dark,
         elevation: 0,
         flexibleSpace: (user != null) ? _buildHelloUser(user) : null,
       ),
@@ -34,7 +36,7 @@ class HomePage extends StatelessWidget {
                   SizedBox(height: 16),
                   _buildTitleSection(context, "Rekomendasi Untukmu!", () {}),
                   SizedBox(height: 8),
-                  listOfKosan(),
+                  _listOfKosan(),
                   SizedBox(height: 16),
                 ],
               ),
@@ -48,7 +50,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget listOfKosan() => Consumer<KosanProvider>(
+  Widget _listOfKosan() => Consumer<KosanProvider>(
         builder: (context, kosanProvider, child) {
           final kosan = kosanProvider.listOfKosan;
           return kosan.isNotEmpty
@@ -140,18 +142,10 @@ class HomePage extends StatelessWidget {
       child: SafeArea(
         child: Row(
           children: [
-            CircleAvatar(
-              backgroundColor: Colors.white,
-              backgroundImage:
-                  user.imageUrl != "" ? NetworkImage(user.imageUrl) : null,
-              radius: 10,
-              child: user.imageUrl != ""
-                  ? null
-                  : Icon(
-                      EvaIcons.person,
-                      color: primaryColor,
-                      size: 10,
-                    ),
+            UserCircleAvatar(
+              imageUrl: user.imageUrl,
+              isOnPrimaryColor: true,
+              circleRadius: 10,
             ),
             SizedBox(width: 8),
             Expanded(

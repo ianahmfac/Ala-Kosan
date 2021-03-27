@@ -3,14 +3,17 @@ import 'package:ala_kosan/pages/auth/signup_page.dart';
 import 'package:ala_kosan/services/auth_service.dart';
 import 'package:ala_kosan/shared/device.dart';
 import 'package:ala_kosan/shared/themes.dart';
+import 'package:ala_kosan/shared/utils.dart';
 import 'package:ala_kosan/widgets/container_form.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    statusBarBrightness(isDark: true);
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(32),

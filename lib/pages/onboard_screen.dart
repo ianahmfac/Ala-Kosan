@@ -2,6 +2,7 @@ import 'package:ala_kosan/helpers/constants.dart';
 import 'package:ala_kosan/pages/wrapper.dart';
 import 'package:ala_kosan/shared/device.dart';
 import 'package:ala_kosan/shared/themes.dart';
+import 'package:ala_kosan/shared/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -48,6 +49,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    statusBarBrightness(isDark: false);
     return Scaffold(
       body: Stack(
         children: [

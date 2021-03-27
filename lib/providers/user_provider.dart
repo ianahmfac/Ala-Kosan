@@ -17,4 +17,8 @@ class UserProvider with ChangeNotifier {
     _user = null;
     notifyListeners();
   }
+
+  Future<UserApp> getOwner(String id) {
+    return UserService.getUser(id);
+  }
 }

@@ -60,12 +60,12 @@ class _SignInFormState extends State<SignInForm> {
 
   void _signIn() async {
     FocusManager.instance.primaryFocus.unfocus();
-    setState(() {
-      _isLoading = true;
-    });
     if (!_formKey.currentState.validate()) return;
     _formKey.currentState.save();
     try {
+      setState(() {
+        _isLoading = true;
+      });
       await AuthService.signInWithEmail(_email, _password);
     } catch (e) {
       showSnackbarError(context, e.toString());

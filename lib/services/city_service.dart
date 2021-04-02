@@ -8,12 +8,9 @@ class CityService {
   static Future<List<City>> getCity() async {
     QuerySnapshot snapshot = await _ref.get();
     List<City> cities = snapshot.docs
-        .map((city) => City(
-              id: city.data()["id"],
-              city: city.data()["city"],
-              image: city.data()["image"],
-              desc: city.data()["description"],
-            ))
+        .map(
+          (city) => City.fromMap(city.data()),
+        )
         .toList();
     return cities;
   }

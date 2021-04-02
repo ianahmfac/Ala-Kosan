@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class City {
@@ -12,4 +14,13 @@ class City {
     @required this.image,
     @required this.desc,
   });
+
+  factory City.fromMap(Map<String, dynamic> map) {
+    return City(
+      id: map['id'],
+      city: map['city'],
+      image: map['image'],
+      desc: map['description'],
+    );
+  }
 }

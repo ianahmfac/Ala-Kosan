@@ -1,4 +1,5 @@
 import 'package:ala_kosan/models/user_app.dart';
+import 'package:ala_kosan/pages/list_kos.dart';
 import 'package:ala_kosan/providers/city_provider.dart';
 import 'package:ala_kosan/providers/kosan_provider.dart';
 import 'package:ala_kosan/providers/user_provider.dart';
@@ -30,11 +31,14 @@ class HomePage extends StatelessWidget {
                 children: [
                   _buildHeader(user, context),
                   SizedBox(height: 16),
-                  _buildTitleSection(context, "Yuk, Cari di Kota Ini!", () {}),
+                  _buildTitleSection(
+                      context, "Yuk, Cari di Kota Ini!", () {}, false),
                   SizedBox(height: 8),
                   _buildCityCard(),
                   SizedBox(height: 16),
-                  _buildTitleSection(context, "Rekomendasi Untukmu!", () {}),
+                  _buildTitleSection(context, "Rekomendasi Untukmu!", () {
+                    Navigator.of(context).pushNamed(ListKos.routeName);
+                  }),
                   SizedBox(height: 8),
                   _listOfKosan(),
                   SizedBox(height: 16),
@@ -52,7 +56,7 @@ class HomePage extends StatelessWidget {
 
   Widget _listOfKosan() => Consumer<KosanProvider>(
         builder: (context, kosanProvider, child) {
-          final kosan = kosanProvider.listOfKosan;
+          final kosan = kosanProvider.listOfKosanHome;
           return kosan.isNotEmpty
               ? Column(
                   children: List.generate(
@@ -73,9 +77,10 @@ class HomePage extends StatelessWidget {
       );
 
   Widget _buildTitleSection(
-      BuildContext context, String title, Function function) {
+      BuildContext context, String title, Function function,
+      [bool hasButton = true]) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
           Expanded(
@@ -86,13 +91,14 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          TextButton(
-            onPressed: function,
-            child: Text("See All"),
-            style: TextButton.styleFrom(
-              primary: primaryColor,
+          if (hasButton)
+            TextButton(
+              onPressed: function,
+              child: Text("See All"),
+              style: TextButton.styleFrom(
+                primary: primaryColor,
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -106,7 +112,7 @@ class HomePage extends StatelessWidget {
         child: cities.isNotEmpty
             ? ListView.builder(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 scrollDirection: Axis.horizontal,
                 itemCount: cities.length,
                 itemBuilder: (context, index) {

@@ -35,6 +35,35 @@ class Kosan {
     this.discount = 0.0,
   });
 
+  factory Kosan.fromFirestore(Map<String, dynamic> doc) {
+    return Kosan(
+      id: doc["id"],
+      name: doc["name"],
+      cityId: doc["cityId"],
+      address: doc["address"],
+      longitude: doc["longitude"],
+      latitude: doc["latitude"],
+      images: (doc["images"] as List).map((image) => image.toString()).toList(),
+      type: doc["type"],
+      price: doc["price"],
+      ownerId: doc["ownerId"],
+      availableRoom: doc["availableRoom"],
+      facility: Facility(
+        hasAirConditioner: doc["hasAirConditioner"],
+        hasBed: doc["hasBed"],
+        hasCupboard: doc["hasCupboard"],
+        isInnerToilet: doc["isInnerToilet"],
+        hasWifi: doc["hasWifi"],
+        hasWorkbench: doc["hasWorkbench"],
+        isIncludeElectricity: doc["isIncludeElectricity"],
+        hasParkingLot: doc["hasParkingLot"],
+      ),
+      additionalInfo: doc["additionalInfo"],
+      discount: doc["discount"],
+      rating: doc["rating"],
+    );
+  }
+
   Kosan copyWith({
     String id,
     String name,
@@ -71,97 +100,3 @@ class Kosan {
     );
   }
 }
-
-List<Kosan> kosanDummy = [
-  Kosan(
-    id: "001",
-    name: "Griya Aziza",
-    cityId: "OxaWMiEW03abeIU8ktRv",
-    address: "Jl. G2. No. 22, Slipi, Palmerah, Jakarta Barat",
-    latitude: -6.1900496,
-    longitude: 106.8001794,
-    images: [
-      "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-      "https://images.unsplash.com/photo-1556911220-bff31c812dba?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2035&q=80",
-    ],
-    type: "Campur",
-    ownerId: "LNCW0ce4yLXPac0d5OJg0dfEtZ63",
-    availableRoom: 9,
-    facility: Facility(
-      hasAirConditioner: true,
-      hasBed: true,
-      hasCupboard: true,
-      isInnerToilet: true,
-      hasWifi: true,
-      hasWorkbench: false,
-      isIncludeElectricity: false,
-      hasParkingLot: true,
-    ),
-    additionalInfo:
-        """Terdiri dari 2 lantai, dan masing-masing lantai memiliki 6 kamar. Terdapat dapur umum yang dapat digunakan bersama-sama per lantai. 
-    
-Kosan ini dekat dengan wilayah perkantoran dan pusat perbelanjaan.""",
-    price: 1800000,
-    rating: 4.97,
-  ),
-  Kosan(
-    id: "002",
-    name: "Kos Vida View",
-    cityId: "BfWVFC0OUl5y20keeI4B",
-    address: "Jl. Topaz Raya No.121, Masale, Panakkukang, Makassar",
-    latitude: -5.1537158,
-    longitude: 119.438477,
-    images: [
-      "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1951&q=80",
-      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1567&q=80",
-      "https://images.unsplash.com/photo-1564540583246-934409427776?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1935&q=80",
-      "https://images.unsplash.com/photo-1598546720078-8659863bc47d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-    ],
-    type: "Pria",
-    ownerId: "rDhkFqaE3aTUWClzQvcB89rtirI2",
-    price: 2500000,
-    facility: Facility(
-      hasAirConditioner: true,
-      hasBed: true,
-      hasCupboard: false,
-      isInnerToilet: false,
-      hasWifi: true,
-      hasWorkbench: true,
-      isIncludeElectricity: false,
-      hasParkingLot: true,
-    ),
-    availableRoom: 5,
-    rating: 4.0,
-  ),
-  Kosan(
-    id: "003",
-    name: "Sweet Van Java Kos",
-    cityId: "5zvaObbGQsgFrTg03Jae",
-    address: "Jl. Martadinata No. 118, Bandung",
-    latitude: -6.9105841,
-    longitude: 107.6243361,
-    images: [
-      "https://images.unsplash.com/photo-1586105251261-72a756497a11?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1467&q=80",
-      "https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-      "https://images.unsplash.com/photo-1604709177225-055f99402ea3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-      "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80",
-    ],
-    type: "Wanita",
-    availableRoom: 1,
-    ownerId: "MJwovYGW9SXEW2UC6GYOBH8b4ZB2",
-    facility: Facility(
-      hasAirConditioner: false,
-      hasBed: true,
-      hasCupboard: true,
-      isInnerToilet: true,
-      hasWifi: true,
-      hasWorkbench: true,
-      isIncludeElectricity: true,
-      hasParkingLot: false,
-    ),
-    price: 1499000,
-    rating: 3.5,
-  ),
-];

@@ -10,7 +10,7 @@ class UploadImageService {
     if (image != null) {
       UploadTask imageUpload =
           _userProfileRef.child("$email.png").putFile(image);
-      return imageUpload.snapshot.ref.getDownloadURL();
+      return await imageUpload.snapshot.ref.getDownloadURL();
     }
     return "";
   }

@@ -1,6 +1,7 @@
 import 'package:ala_kosan/pages/auth/image_pick_page.dart';
 import 'package:ala_kosan/pages/auth/signup_page.dart';
 import 'package:ala_kosan/pages/detail_kos.dart';
+import 'package:ala_kosan/pages/list_kos.dart';
 import 'package:ala_kosan/pages/wrapper.dart';
 import 'package:ala_kosan/providers/city_provider.dart';
 import 'package:ala_kosan/providers/kosan_provider.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
             SignUpPage.routeName: (ctx) => SignUpPage(),
             ImagePickPage.routeName: (ctx) => ImagePickPage(),
             DetailKos.routeName: (ctx) => DetailKos(),
+            ListKos.routeName: (ctx) => ListKos(),
           },
         ),
       ),

@@ -31,7 +31,7 @@ class KosanItem extends StatelessWidget {
       },
       child: Container(
         margin: const EdgeInsets.symmetric(
-          horizontal: 24,
+          horizontal: 16,
           vertical: 8,
         ),
         height: 170,

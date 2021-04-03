@@ -10,13 +10,15 @@ class ListKos extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Daftar Kosan"),
+        brightness: Brightness.dark,
       ),
       body: Consumer<KosanProvider>(builder: (context, kosanProvider, _) {
         final kosanItem = kosanProvider.listOfKosan;
         return ListView.builder(
           itemCount: kosanItem.length,
           itemBuilder: (BuildContext context, int index) {
-            return KosanItem(kosanItem: kosanItem[index]);
+            final kosan = kosanItem[index];
+            return KosanItem(kosanItem: kosan);
           },
         );
       }),

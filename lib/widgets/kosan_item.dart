@@ -4,6 +4,7 @@ import 'package:ala_kosan/pages/detail_kos.dart';
 import 'package:ala_kosan/providers/city_provider.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/shared/utils.dart';
+import 'package:ala_kosan/widgets/favorite_icon_button.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -109,24 +110,22 @@ class KosanItem extends StatelessWidget {
               width: 120,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Material(
-              color: Colors.white.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(100),
-              child: InkWell(
-                splashColor: accentColor.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(100),
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Icon(
-                    EvaIcons.heartOutline,
-                    color: accentColor,
-                  ),
-                ),
+          Positioned(
+            top: -12,
+            left: -12,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: primaryColor,
               ),
+              height: 54,
+              width: 54,
             ),
+          ),
+          Positioned(
+            top: -8,
+            left: -8,
+            child: FavoriteIconButton(kosan: kosanItem),
           ),
         ],
       ),

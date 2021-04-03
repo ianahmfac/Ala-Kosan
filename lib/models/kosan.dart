@@ -1,7 +1,7 @@
 import 'package:ala_kosan/models/facility.dart';
 import 'package:flutter/foundation.dart';
 
-class Kosan {
+class Kosan with ChangeNotifier {
   final String id;
   final String name;
   final String cityId;
@@ -17,6 +17,7 @@ class Kosan {
   final String additionalInfo;
   final double rating;
   final double discount;
+  bool isFavorite;
   Kosan({
     @required this.id,
     @required this.name,
@@ -33,6 +34,7 @@ class Kosan {
     this.additionalInfo = "Tidak ada info tambahan.",
     this.rating = 0.0,
     this.discount = 0.0,
+    this.isFavorite = false,
   });
 
   factory Kosan.fromFirestore(Map<String, dynamic> doc) {
@@ -98,5 +100,10 @@ class Kosan {
       rating: rating ?? this.rating,
       discount: discount ?? this.discount,
     );
+  }
+
+  void setFavorite(String userId) {
+    isFavorite = !isFavorite;
+    notifyListeners();
   }
 }

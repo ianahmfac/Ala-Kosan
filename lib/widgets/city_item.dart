@@ -1,4 +1,5 @@
 import 'package:ala_kosan/models/city.dart';
+import 'package:ala_kosan/pages/city_list_kos.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,10 @@ class CityItem extends StatelessWidget {
           ),
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context)
+                  .pushNamed(CityListKos.routeName, arguments: city);
+            },
             child: Column(
               children: [
                 ClipRRect(

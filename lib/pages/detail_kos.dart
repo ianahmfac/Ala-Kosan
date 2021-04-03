@@ -11,6 +11,7 @@ import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/shared/utils.dart';
 import 'package:ala_kosan/widgets/chip_type.dart';
 import 'package:ala_kosan/widgets/facility_item.dart';
+import 'package:ala_kosan/widgets/favorite_icon_button.dart';
 import 'package:ala_kosan/widgets/user_circle_avatar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
@@ -92,11 +93,8 @@ class _DetailKosState extends State<DetailKos> {
                   ),
                   pinned: true,
                   actions: [
-                    IconButton(
-                      padding: const EdgeInsets.all(16),
-                      iconSize: 30,
-                      icon: Icon(EvaIcons.heartOutline),
-                      onPressed: () {},
+                    FavoriteIconButton(
+                      kosan: kosan,
                     ),
                   ],
                   expandedHeight: 350 - paddingSafeDevice(context).top,
@@ -141,9 +139,6 @@ class _DetailKosState extends State<DetailKos> {
                     _buildFacility(context, kosan),
                     SizedBox(height: 16),
                     Divider(),
-                    _buildCardOwner(context),
-                    SizedBox(height: 16),
-                    Divider(),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -154,10 +149,14 @@ class _DetailKosState extends State<DetailKos> {
                         SizedBox(height: 4),
                         Text(
                           kosan.additionalInfo,
-                          style: TextStyle(color: Colors.grey),
+                          style: onBoardSubtitle(context),
+                          textAlign: TextAlign.justify,
                         ),
                       ],
                     ),
+                    SizedBox(height: 16),
+                    Divider(),
+                    _buildCardOwner(context),
                     SizedBox(height: 16),
                     Divider(),
                     _buildLocation(kosan, context),
@@ -271,55 +270,58 @@ class _DetailKosState extends State<DetailKos> {
           "Lokasi Kosan",
           style: contentTitle(context),
         ),
-        SizedBox(height: 4),
+        SizedBox(height: 8),
         Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(EvaIcons.pinOutline),
-            SizedBox(width: 8),
+            Icon(EvaIcons.pinOutline, size: 32),
+            SizedBox(width: 12),
             Expanded(
               child: Text(
                 kosan.address,
-                style: onBoardSubtitle(context).copyWith(fontSize: 16),
+                style: onBoardSubtitle(context),
+                textAlign: TextAlign.justify,
               ),
             ),
           ],
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 16),
         Card(
-          elevation: 8,
+          elevation: 4,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(8),
           ),
           child: InkWell(
             onTap: () {
-              showAlert(context,
-                  child: CupertinoAlertDialog(
-                    title: Text("Ingin membuka MAPS?"),
-                    actions: [
-                      CupertinoButton(
-                        child: Text(
-                          "Cancel",
-                          style: TextStyle(color: primaryColor),
-                        ),
-                        onPressed: () => Navigator.of(context).pop(),
+              showAlert(
+                context,
+                child: CupertinoAlertDialog(
+                  title: Text("Ingin membuka MAPS?"),
+                  actions: [
+                    CupertinoButton(
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(color: primaryColor),
                       ),
-                      CupertinoButton(
-                        child: Text("Open Maps"),
-                        onPressed: () {
-                          try {
-                            Navigator.pop(context);
-                            _launchMap(kosan.latitude, kosan.longitude);
-                          } catch (e) {
-                            showSnackbarError(context, e.toString());
-                          }
-                        },
-                      ),
-                    ],
-                  ));
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    CupertinoButton(
+                      child: Text("Open Maps"),
+                      onPressed: () {
+                        try {
+                          Navigator.pop(context);
+                          _launchMap(kosan.latitude, kosan.longitude);
+                        } catch (e) {
+                          showSnackbarError(context, e.toString());
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              );
             },
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(8),
               child: FadeInImage(
                 placeholder: AssetImage("assets/images/placeholder.png"),
                 image: NetworkImage(_mapUrl),

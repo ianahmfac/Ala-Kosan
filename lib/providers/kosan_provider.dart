@@ -12,6 +12,10 @@ class KosanProvider with ChangeNotifier {
     return _listOfKosan.where((element) => element.cityId == id).toList();
   }
 
+  List<Kosan> getKosanFavorites() {
+    return _listOfKosan.where((element) => element.isFavorite).toList();
+  }
+
   void getKosan() async {
     _listOfKosan = await KosanService.getKosan()
       ..shuffle();

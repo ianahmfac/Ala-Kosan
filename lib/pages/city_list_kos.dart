@@ -41,49 +41,45 @@ class CityListKos extends StatelessWidget {
 
   Widget _buildCityImageHeader(City city, BuildContext context) {
     return Container(
+      height: 300,
       width: double.infinity,
-      color: primaryColor,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: NetworkImage(city.image),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Container(
-        height: 300,
         width: double.infinity,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(city.image),
-            fit: BoxFit.cover,
+          gradient: LinearGradient(
+            colors: [
+              Colors.black87,
+              Colors.transparent,
+              Colors.black54,
+            ],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
           ),
         ),
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.black87,
-                Colors.transparent,
-                Colors.black54,
-              ],
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              city.city,
+              style: contentTitle2(context).copyWith(
+                color: Colors.white,
+              ),
             ),
-          ),
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                city.city,
-                style: contentTitle2(context).copyWith(
-                  color: Colors.white,
-                ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                city.desc,
-                style: TextStyle(color: Colors.white, fontSize: 10),
-                textAlign: TextAlign.justify,
-              ),
-            ],
-          ),
+            SizedBox(height: 4),
+            Text(
+              city.desc,
+              style: TextStyle(color: Colors.white, fontSize: 10),
+              textAlign: TextAlign.justify,
+            ),
+          ],
         ),
       ),
     );

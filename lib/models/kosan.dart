@@ -1,4 +1,5 @@
 import 'package:ala_kosan/models/facility.dart';
+import 'package:ala_kosan/services/user_service.dart';
 import 'package:flutter/foundation.dart';
 
 class Kosan with ChangeNotifier {
@@ -37,7 +38,7 @@ class Kosan with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  factory Kosan.fromFirestore(Map<String, dynamic> doc) {
+  factory Kosan.fromFirestore(Map<String, dynamic> doc, bool isFavorite) {
     return Kosan(
       id: doc["id"],
       name: doc["name"],
@@ -63,6 +64,7 @@ class Kosan with ChangeNotifier {
       additionalInfo: doc["additionalInfo"],
       discount: doc["discount"],
       rating: doc["rating"],
+      isFavorite: isFavorite,
     );
   }
 
@@ -82,6 +84,7 @@ class Kosan with ChangeNotifier {
     String additionalInfo,
     double rating,
     double discount,
+    bool isFavorite,
   }) {
     return Kosan(
       id: id ?? this.id,
@@ -99,11 +102,18 @@ class Kosan with ChangeNotifier {
       additionalInfo: additionalInfo ?? this.additionalInfo,
       rating: rating ?? this.rating,
       discount: discount ?? this.discount,
+      isFavorite: isFavorite ?? this.isFavorite,
     );
   }
 
-  void setFavorite(String userId) {
+  void setFavorite() {
     isFavorite = !isFavorite;
     notifyListeners();
+    try {
+      UserService.setFavorite(id, isFavorite);
+    } catch (e) {
+      isFavorite = !isFavorite;
+      notifyListeners();
+    }
   }
 }

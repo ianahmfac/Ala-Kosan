@@ -40,7 +40,7 @@ class _FavoriteButton extends StatelessWidget {
         kos.isFavorite ? EvaIcons.heart : EvaIcons.heartOutline,
       ),
       onPressed: () {
-        kos.setFavorite(AuthService.currentUid);
+        kos.setFavorite();
       },
     );
   }

@@ -38,7 +38,8 @@ class AuthService {
       throw e.message;
     } catch (e) {
       UploadImageService.deleteImage(email, image);
-      throw Exception("Terjadi kesalahan, silahkan coba lagi nanti.");
+      print(e.toString());
+      throw e;
     }
   }
 

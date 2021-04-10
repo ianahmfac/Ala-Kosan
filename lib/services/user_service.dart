@@ -1,4 +1,5 @@
 import 'package:ala_kosan/models/user_app.dart';
+import 'package:ala_kosan/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserService {
@@ -24,5 +25,26 @@ class UserService {
       phoneNumber: user["phoneNumber"],
       imageUrl: user["imageUrl"],
     );
+  }
+
+  static Future<void> setFavorite(String kosanId, bool favorite) async {
+    _collectionReference
+        .doc(AuthService.currentUid)
+        .collection("favorites")
+        .doc(kosanId)
+        .set({
+      "favorite": favorite,
+    });
+  }
+
+  static Future<Map<String, dynamic>> getFavorite() async {
+    final snapshot = await _collectionReference
+        .doc(AuthService.currentUid)
+        .collection("favorites")
+        .get();
+    Map<String, dynamic> returnValue = {};
+    snapshot.docs
+        .forEach((kos) => returnValue[kos.id] = kos.data()["favorite"]);
+    return returnValue;
   }
 }

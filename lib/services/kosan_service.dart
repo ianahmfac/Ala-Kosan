@@ -1,4 +1,5 @@
 import 'package:ala_kosan/models/kosan.dart';
+import 'package:ala_kosan/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class KosanService {
@@ -40,10 +41,15 @@ class KosanService {
   }
 
   static Future<List<Kosan>> getKosan() async {
+    List<Kosan> kosan = [];
     final querySnapshot = await _collectionReference.get();
-    List<Kosan> kosan = querySnapshot.docs
-        .map((kos) => Kosan.fromFirestore(kos.data()))
-        .toList();
+    final userFavorites = await UserService.getFavorite();
+    querySnapshot.docs.forEach((kos) {
+      kosan.add(Kosan.fromFirestore(
+        kos.data(),
+        userFavorites[kos.data()["id"]] ?? false,
+      ));
+    });
     return kosan;
   }
 }

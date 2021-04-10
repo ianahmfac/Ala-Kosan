@@ -16,7 +16,7 @@ class KosanProvider with ChangeNotifier {
     return _listOfKosan.where((element) => element.isFavorite).toList();
   }
 
-  void getKosan() async {
+  Future<void> getKosan() async {
     _listOfKosan = await KosanService.getKosan()
       ..shuffle();
     notifyListeners();

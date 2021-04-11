@@ -6,11 +6,14 @@ import 'package:ala_kosan/providers/user_provider.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/widgets/city_item.dart';
 import 'package:ala_kosan/widgets/kosan_item.dart';
+import 'package:ala_kosan/widgets/shimmer_loading/city_loading.dart';
+import 'package:ala_kosan/widgets/shimmer_loading/kosan_loading.dart';
 import 'package:ala_kosan/widgets/user_circle_avatar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -21,36 +24,28 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         brightness: Brightness.dark,
         elevation: 0,
-        flexibleSpace: (user != null) ? _buildHelloUser(user) : null,
+        flexibleSpace: _buildHelloUser(user),
       ),
-      body: (user != null)
-          ? SingleChildScrollView(
-              physics: ClampingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildHeader(user, context),
-                  SizedBox(height: 16),
-                  _buildTitleSection(
-                      context, "Yuk, Cari di Kota Ini!", () {}, false),
-                  SizedBox(height: 8),
-                  _buildCityCard(),
-                  SizedBox(height: 16),
-                  _buildTitleSection(context, "Rekomendasi Untukmu!", () {
-                    Navigator.of(context).pushNamed(ListKos.routeName);
-                  }),
-                  SizedBox(height: 8),
-                  _listOfKosan(),
-                  SizedBox(height: 16),
-                ],
-              ),
-            )
-          : Center(
-              child: SpinKitFadingCircle(
-                color: accentColor,
-                size: 50,
-              ),
-            ),
+      body: SingleChildScrollView(
+        physics: ClampingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(user, context),
+            SizedBox(height: 16),
+            _buildTitleSection(context, "Yuk, Cari di Kota Ini!", () {}, false),
+            SizedBox(height: 8),
+            _buildCityCard(),
+            SizedBox(height: 16),
+            _buildTitleSection(context, "Rekomendasi Untukmu!", () {
+              Navigator.of(context).pushNamed(ListKos.routeName);
+            }),
+            SizedBox(height: 8),
+            _listOfKosan(),
+            SizedBox(height: 16),
+          ],
+        ),
+      ),
     );
   }
 
@@ -67,10 +62,10 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                 )
-              : Center(
-                  child: SpinKitFadingCircle(
-                    color: accentColor,
-                    size: 50,
+              : Column(
+                  children: List.generate(
+                    2,
+                    (index) => KosanLoading(),
                   ),
                 );
         },
@@ -120,12 +115,7 @@ class HomePage extends StatelessWidget {
                   return CityItem(city: city);
                 },
               )
-            : Center(
-                child: SpinKitFadingCircle(
-                  color: accentColor,
-                  size: 50,
-                ),
-              ),
+            : CityLoading(),
       );
     });
   }
@@ -148,15 +138,21 @@ class HomePage extends StatelessWidget {
       child: SafeArea(
         child: Row(
           children: [
-            UserCircleAvatar(
-              imageUrl: user.imageUrl,
-              isOnPrimaryColor: true,
-              circleRadius: 10,
-            ),
+            user != null
+                ? UserCircleAvatar(
+                    imageUrl: user.imageUrl,
+                    isOnPrimaryColor: true,
+                    circleRadius: 10,
+                  )
+                : SpinKitFadingCircle(
+                    color: Colors.white,
+                    size: 10,
+                  ),
             SizedBox(width: 8),
             Expanded(
                 child: Text(
-              "Hi, ${user.name ?? ""}",
+              user != null ? "Hi, ${user.name}" : "Loading user name...",
+              maxLines: 1,
               style: TextStyle(
                 color: Colors.white,
               ),

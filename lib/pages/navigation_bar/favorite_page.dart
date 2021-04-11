@@ -14,12 +14,16 @@ class FavoritePage extends StatelessWidget {
         title: Text("Favorite"),
         brightness: Brightness.dark,
       ),
-      body: ListView.builder(
-        itemCount: kosanFavorites.length,
-        itemBuilder: (context, index) {
-          final kosanItem = kosanFavorites[index];
-          return KosanItem(kosanItem: kosanItem);
-        },
+      body: RefreshIndicator(
+        onRefresh: () =>
+            Provider.of<KosanProvider>(context, listen: false).getKosan(),
+        child: ListView.builder(
+          itemCount: kosanFavorites.length,
+          itemBuilder: (context, index) {
+            final kosanItem = kosanFavorites[index];
+            return KosanItem(kosanItem: kosanItem);
+          },
+        ),
       ),
     );
   }

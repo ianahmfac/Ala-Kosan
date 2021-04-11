@@ -64,14 +64,61 @@ class _DetailKosState extends State<DetailKos> {
   }
 
   void _launchWhatsapp(String phoneNumber) async {
-    try {
-      final url = Constants.whatsappApiUrl(phoneNumber);
-      if (await canLaunch(url)) {
-        await launch(url);
-      }
-    } catch (e) {
-      throw "Tidak dapat membuka WhatsApp";
+    final url = Constants.whatsappApiUrl(phoneNumber);
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw Exception("Tidak dapat membuka WhatsApp");
     }
+  }
+
+  void _contactOwner(String phoneNumber) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+      ),
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    "Hubungi pemilik",
+                    style: contentTitle(context),
+                  ),
+                  Spacer(),
+                  IconButton(
+                    icon: Icon(EvaIcons.close),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              ),
+              SizedBox(height: 16),
+              ListTile(
+                leading: Icon(EvaIcons.phoneCall),
+                title: Text("Telepon $phoneNumber"),
+                onTap: () {
+                  launch("tel://$phoneNumber");
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(EvaIcons.messageCircle),
+                title: Text("Chatting melalui WhatsApp"),
+                onTap: () {
+                  _launchWhatsapp(phoneNumber);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -90,7 +137,6 @@ class _DetailKosState extends State<DetailKos> {
                   brightness: Brightness.dark,
                   flexibleSpace: FlexibleSpaceBar(
                     background: _buildImageHeader(kosan),
-                    collapseMode: CollapseMode.pin,
                   ),
                   pinned: true,
                   actions: [
@@ -212,7 +258,7 @@ class _DetailKosState extends State<DetailKos> {
                       EvaIcons.messageCircleOutline,
                       color: accentColor,
                     ),
-                    onPressed: () => _launchWhatsapp(userOwner.phoneNumber),
+                    onPressed: () => _contactOwner(userOwner.phoneNumber),
                   ),
                 );
               } else if (snapshot.hasError) {

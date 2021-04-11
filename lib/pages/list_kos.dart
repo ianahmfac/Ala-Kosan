@@ -14,12 +14,16 @@ class ListKos extends StatelessWidget {
       ),
       body: Consumer<KosanProvider>(builder: (context, kosanProvider, _) {
         final kosanItem = kosanProvider.listOfKosan;
-        return ListView.builder(
-          itemCount: kosanItem.length,
-          itemBuilder: (BuildContext context, int index) {
-            final kosan = kosanItem[index];
-            return KosanItem(kosanItem: kosan);
-          },
+        return RefreshIndicator(
+          onRefresh: () =>
+              Provider.of<KosanProvider>(context, listen: false).getKosan(),
+          child: ListView.builder(
+            itemCount: kosanItem.length,
+            itemBuilder: (BuildContext context, int index) {
+              final kosan = kosanItem[index];
+              return KosanItem(kosanItem: kosan);
+            },
+          ),
         );
       }),
     );

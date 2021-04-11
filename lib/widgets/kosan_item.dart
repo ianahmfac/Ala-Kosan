@@ -5,6 +5,7 @@ import 'package:ala_kosan/providers/city_provider.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/shared/utils.dart';
 import 'package:ala_kosan/widgets/favorite_icon_button.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -102,12 +103,16 @@ class KosanItem extends StatelessWidget {
         children: [
           Hero(
             tag: kosanItem.id,
-            child: FadeInImage(
-              placeholder: AssetImage("assets/images/placeholder.png"),
-              image: NetworkImage(kosanItem.images[0]),
+            child: CachedNetworkImage(
+              imageUrl: kosanItem.images[0],
               fit: BoxFit.cover,
-              height: double.infinity,
               width: 120,
+              height: double.infinity,
+              placeholder: (context, url) => Image.asset(
+                "assets/images/placeholder.png",
+                fit: BoxFit.cover,
+                width: 120,
+              ),
             ),
           ),
           Positioned(

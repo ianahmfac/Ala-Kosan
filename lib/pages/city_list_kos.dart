@@ -2,6 +2,7 @@ import 'package:ala_kosan/models/city.dart';
 import 'package:ala_kosan/providers/kosan_provider.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/widgets/kosan_item.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,44 +44,53 @@ class CityListKos extends StatelessWidget {
     return Container(
       height: 300,
       width: double.infinity,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(city.image),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.black87,
-              Colors.transparent,
-              Colors.black54,
-            ],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
+      color: primaryColor,
+      child: Stack(
+        children: [
+          CachedNetworkImage(
+            imageUrl: city.image,
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
+            placeholder: (context, url) => Image.asset(
+              "assets/images/placeholder.png",
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              city.city,
-              style: contentTitle2(context).copyWith(
-                color: Colors.white,
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.black87,
+                  Colors.transparent,
+                  Colors.black54,
+                ],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
               ),
             ),
-            SizedBox(height: 4),
-            Text(
-              city.desc,
-              style: TextStyle(color: Colors.white, fontSize: 10),
-              textAlign: TextAlign.justify,
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  city.city,
+                  style: contentTitle2(context).copyWith(
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  city.desc,
+                  style: TextStyle(color: Colors.white, fontSize: 10),
+                  textAlign: TextAlign.justify,
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

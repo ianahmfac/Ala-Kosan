@@ -13,6 +13,7 @@ import 'package:ala_kosan/widgets/chip_type.dart';
 import 'package:ala_kosan/widgets/facility_item.dart';
 import 'package:ala_kosan/widgets/favorite_icon_button.dart';
 import 'package:ala_kosan/widgets/user_circle_avatar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -400,9 +401,12 @@ class _DetailKosState extends State<DetailKos> {
               },
               itemBuilder: (context, index) => Stack(
                 children: [
-                  FadeInImage(
-                    placeholder: AssetImage("assets/images/placeholder.png"),
-                    image: NetworkImage(kosan.images[_indexImage]),
+                  CachedNetworkImage(
+                    imageUrl: kosan.images[_indexImage],
+                    placeholder: (context, url) => Image.asset(
+                      "assets/images/placeholder.png",
+                      fit: BoxFit.cover,
+                    ),
                     fit: BoxFit.cover,
                     height: 350,
                     width: double.infinity,

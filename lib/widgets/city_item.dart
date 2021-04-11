@@ -1,6 +1,7 @@
 import 'package:ala_kosan/models/city.dart';
 import 'package:ala_kosan/pages/city_list_kos.dart';
 import 'package:ala_kosan/shared/themes.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -31,12 +32,15 @@ class CityItem extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                  child: FadeInImage(
-                    image: NetworkImage(city.image),
-                    placeholder: AssetImage("assets/images/placeholder.png"),
+                  child: CachedNetworkImage(
+                    imageUrl: city.image,
                     height: constraints.maxHeight * 0.7,
                     width: double.infinity,
                     fit: BoxFit.cover,
+                    placeholder: (context, url) => Image.asset(
+                      "assets/images/placeholder.png",
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 Container(

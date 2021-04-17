@@ -3,20 +3,26 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class UploadImageService {
-  static final Reference _userProfileRef =
-      FirebaseStorage.instance.ref("profile_picture");
-
   static Future<String> uploadAndGetImageUrl(String email, File image) async {
+    final Reference _userProfileRef = FirebaseStorage.instance.ref();
+    String returnImageUrl;
     if (image != null) {
-      UploadTask imageUpload =
-          _userProfileRef.child("$email.png").putFile(image);
-      return await imageUpload.snapshot.ref.getDownloadURL();
+      await _userProfileRef
+          .child("profile_picture/$email.png")
+          .putFile(image)
+          .whenComplete(() async {
+        returnImageUrl = await _userProfileRef
+            .child("profile_picture/$email.png")
+            .getDownloadURL();
+      });
+      return returnImageUrl;
     }
     return "";
   }
 
   static void deleteImage(String email, File image) async {
+    final _userProfileRef = FirebaseStorage.instance.ref();
     if (image == null) return;
-    await _userProfileRef.child("$email.png").delete();
+    await _userProfileRef.child("profile_picture/$email.png").delete();
   }
 }

@@ -13,7 +13,6 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -150,13 +149,21 @@ class HomePage extends StatelessWidget {
                   ),
             SizedBox(width: 8),
             Expanded(
-                child: Text(
-              user != null ? "Hi, ${user.name}" : "Loading user name...",
-              maxLines: 1,
-              style: TextStyle(
-                color: Colors.white,
+              child: Text(
+                user != null ? "Hi, ${user.name}" : "Loading user name...",
+                maxLines: 1,
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
-            )),
+            ),
+            Spacer(),
+            Image.asset(
+              "assets/images/logo_app_secondary.png",
+              height: 25,
+              width: 25,
+            ),
           ],
         ),
       ),

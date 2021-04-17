@@ -23,7 +23,7 @@ class LoginPage extends StatelessWidget {
             SafeArea(
               bottom: false,
               child: Image.asset(
-                "assets/images/gummy-bed.png",
+                "assets/images/logo_app.png",
                 height: heightOfDevice(context) * 0.25,
                 width: double.infinity,
               ),

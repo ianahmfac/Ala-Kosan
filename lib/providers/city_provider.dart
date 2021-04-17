@@ -16,4 +16,9 @@ class CityProvider with ChangeNotifier {
   City findCityById(String id) {
     return _cities.firstWhere((city) => city.id == id);
   }
+
+  void userSignOut() {
+    _cities = [];
+    notifyListeners();
+  }
 }

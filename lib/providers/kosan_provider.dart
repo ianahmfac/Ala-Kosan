@@ -25,4 +25,9 @@ class KosanProvider with ChangeNotifier {
   Kosan findKosanById(String id) {
     return _listOfKosan.firstWhere((element) => element.id == id);
   }
+
+  void userSignOut() {
+    _listOfKosan = [];
+    notifyListeners();
+  }
 }

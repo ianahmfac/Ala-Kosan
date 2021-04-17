@@ -141,28 +141,30 @@ class HomePage extends StatelessWidget {
                 ? UserCircleAvatar(
                     imageUrl: user.imageUrl,
                     isOnPrimaryColor: true,
-                    circleRadius: 10,
+                    circleRadius: 12,
                   )
                 : SpinKitFadingCircle(
                     color: Colors.white,
-                    size: 10,
+                    size: 12,
                   ),
             SizedBox(width: 8),
             Expanded(
               child: Text(
-                user != null ? "Hi, ${user.name}" : "Loading user name...",
+                user != null
+                    ? "Hi, ${user.name} bfiuwebgfufe"
+                    : "Loading user name...",
                 maxLines: 1,
-                textAlign: TextAlign.end,
                 style: TextStyle(
                   color: Colors.white,
+                  fontSize: 16,
                 ),
               ),
             ),
-            Spacer(),
+            SizedBox(width: 8),
             Image.asset(
               "assets/images/logo_app_secondary.png",
-              height: 25,
-              width: 25,
+              height: 22,
+              width: 22,
             ),
           ],
         ),

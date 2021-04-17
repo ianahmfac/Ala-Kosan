@@ -81,25 +81,26 @@ class FacilityItem extends StatelessWidget {
     return Card(
       elevation: 4,
       child: Container(
-        height: 100,
+        height: 80,
         width: widthOfDevice(context) / 3 - 24,
         padding: const EdgeInsets.all(4),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
               assetPath,
               color: primaryColor,
-              height: 50,
+              height: 35,
               fit: BoxFit.cover,
               width: double.infinity,
             ),
-            Spacer(),
-            Text(
-              text,
-              style: TextStyle(fontSize: 12),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
+            SizedBox(height: 12),
+            FittedBox(
+              child: Text(
+                text,
+                style: TextStyle(fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
             )
           ],
         ),

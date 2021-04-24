@@ -4,6 +4,7 @@ import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/widgets/kosan_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class CityListKos extends StatelessWidget {
@@ -52,9 +53,8 @@ class CityListKos extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
             fit: BoxFit.cover,
-            placeholder: (context, url) => Image.asset(
-              "assets/images/placeholder.png",
-              fit: BoxFit.cover,
+            placeholder: (context, url) => LottieBuilder.asset(
+              "assets/lotties/placeholder.json",
             ),
           ),
           Container(

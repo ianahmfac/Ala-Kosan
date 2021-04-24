@@ -11,24 +11,26 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SafeArea(
-              bottom: false,
-              child: CircleBackButton(),
-            ),
-            SizedBox(height: 32),
-            Text(
-              "Buat Akun Baru\nAla Kosan",
-              style:
-                  onBoardTitle(context).copyWith(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 32),
-            SignUpForm(),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SafeArea(
+                bottom: false,
+                child: CircleBackButton(),
+              ),
+              SizedBox(height: 32),
+              Text(
+                "Buat Akun Baru\nAla Kosan",
+                style:
+                    onBoardTitle(context).copyWith(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 32),
+              SignUpForm(),
+            ],
+          ),
         ),
       ),
     );

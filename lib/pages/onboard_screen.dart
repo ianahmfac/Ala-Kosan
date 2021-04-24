@@ -4,6 +4,7 @@ import 'package:ala_kosan/shared/device.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/shared/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardScreen extends StatefulWidget {
@@ -49,7 +50,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    statusBarBrightness(isDark: false);
+    statusBarBrightness(isDark: true);
     return Scaffold(
       body: Stack(
         children: [
@@ -64,8 +65,8 @@ class _OnboardScreenState extends State<OnboardScreen> {
               },
               itemCount: _onboardInfo.length,
               itemBuilder: (context, index) => Container(
-                color: primaryColor.withOpacity(0.8),
-                child: Image.asset(_onboardInfo[index]["image"]),
+                color: Colors.white,
+                child: LottieBuilder.asset(_onboardInfo[index]["image"]),
               ),
             ),
           ),
@@ -79,7 +80,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                     child: Text(
                       "Skip ->",
                       style: buttonText(context)
-                          .copyWith(color: Colors.white, fontSize: 16),
+                          .copyWith(color: primaryColor, fontSize: 16),
                     ),
                     onPressed: () {
                       _pageController.jumpToPage(_onboardInfo.length - 1);
@@ -92,7 +93,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
             alignment: Alignment.bottomCenter,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.grey[100],
                 borderRadius: BorderRadius.vertical(top: Radius.circular(35)),
               ),
               height: heightOfDevice(context) * 0.3,
@@ -106,7 +107,9 @@ class _OnboardScreenState extends State<OnboardScreen> {
                       children: [
                         Text(
                           _onboardInfo[_indexPage]["title"],
-                          style: onBoardTitle(context),
+                          style: onBoardTitle(context).copyWith(
+                            color: primaryColor,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(height: 8),

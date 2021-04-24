@@ -1,4 +1,6 @@
+import 'package:ala_kosan/helpers/data_search.dart';
 import 'package:ala_kosan/models/user_app.dart';
+import 'package:ala_kosan/pages/city_list_kos.dart';
 import 'package:ala_kosan/pages/list_kos.dart';
 import 'package:ala_kosan/providers/city_provider.dart';
 import 'package:ala_kosan/providers/kosan_provider.dart';
@@ -203,6 +205,18 @@ class HomePage extends StatelessWidget {
 
   Widget _buildSearchField(BuildContext context) {
     return TextField(
+      onTap: () {
+        showSearch(
+          context: context,
+          delegate: DataSearch(),
+        ).then((value) {
+          if (value != null) {
+            Navigator.of(context)
+                .pushNamed(CityListKos.routeName, arguments: value);
+          }
+        });
+      },
+      readOnly: true,
       textAlignVertical: TextAlignVertical.center,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(vertical: 10),

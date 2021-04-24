@@ -19,6 +19,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -432,7 +433,8 @@ class _DetailKosState extends State<DetailKos> {
   Widget _buildImageHeader(Kosan kosan) {
     return Hero(
       tag: _id,
-      child: SizedBox(
+      child: Container(
+        color: Colors.white,
         height: 350,
         width: double.infinity,
         child: Stack(
@@ -449,9 +451,8 @@ class _DetailKosState extends State<DetailKos> {
                 children: [
                   CachedNetworkImage(
                     imageUrl: kosan.images[_indexImage],
-                    placeholder: (context, url) => Image.asset(
-                      "assets/images/placeholder.png",
-                      fit: BoxFit.cover,
+                    placeholder: (context, url) => LottieBuilder.asset(
+                      "assets/lotties/placeholder.json",
                     ),
                     fit: BoxFit.cover,
                     height: 350,

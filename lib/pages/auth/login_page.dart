@@ -15,27 +15,29 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     statusBarBrightness(isDark: true);
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SafeArea(
-              bottom: false,
-              child: Image.asset(
-                "assets/images/logo_app.png",
-                height: heightOfDevice(context) * 0.25,
-                width: double.infinity,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SafeArea(
+                bottom: false,
+                child: Image.asset(
+                  "assets/images/logo_app.png",
+                  height: heightOfDevice(context) * 0.25,
+                  width: double.infinity,
+                ),
               ),
-            ),
-            SizedBox(height: 32),
-            Text(
-              "Masuk",
-              style: contentTitle2(context),
-            ),
-            SizedBox(height: 16),
-            SignInForm(),
-          ],
+              SizedBox(height: 32),
+              Text(
+                "Masuk",
+                style: contentTitle2(context),
+              ),
+              SizedBox(height: 16),
+              SignInForm(),
+            ],
+          ),
         ),
       ),
     );
@@ -159,11 +161,11 @@ class _SignInFormState extends State<SignInForm> {
               ? Center(
                   child: SpinKitFadingCircle(
                     color: accentColor,
-                    size: 50,
+                    size: 40,
                   ),
                 )
               : SizedBox(
-                  height: 50,
+                  height: 40,
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: _signIn,
@@ -177,7 +179,7 @@ class _SignInFormState extends State<SignInForm> {
           SizedBox(height: 16),
           if (!_isLoading)
             SizedBox(
-              height: 50,
+              height: 40,
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () =>

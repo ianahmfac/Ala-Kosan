@@ -1,3 +1,4 @@
+import 'package:ala_kosan/widgets/no_data_found.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,13 +18,15 @@ class FavoritePage extends StatelessWidget {
       body: RefreshIndicator(
         onRefresh: () =>
             Provider.of<KosanProvider>(context, listen: false).getKosan(),
-        child: ListView.builder(
-          itemCount: kosanFavorites.length,
-          itemBuilder: (context, index) {
-            final kosanItem = kosanFavorites[index];
-            return KosanItem(kosanItem: kosanItem);
-          },
-        ),
+        child: kosanFavorites.isNotEmpty
+            ? ListView.builder(
+                itemCount: kosanFavorites.length,
+                itemBuilder: (context, index) {
+                  final kosanItem = kosanFavorites[index];
+                  return KosanItem(kosanItem: kosanItem);
+                },
+              )
+            : NoDataFound(message: "Tambahkan Kosan ke Daftar Favorit"),
       ),
     );
   }

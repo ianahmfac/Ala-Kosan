@@ -4,6 +4,7 @@ import 'package:ala_kosan/shared/themes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class CityItem extends StatelessWidget {
   final City city;
@@ -37,9 +38,8 @@ class CityItem extends StatelessWidget {
                     height: constraints.maxHeight * 0.7,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    placeholder: (context, url) => Image.asset(
-                      "assets/images/placeholder.png",
-                      fit: BoxFit.cover,
+                    placeholder: (context, url) => LottieBuilder.asset(
+                      "assets/lotties/placeholder.json",
                     ),
                   ),
                 ),

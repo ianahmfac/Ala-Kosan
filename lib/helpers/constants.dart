@@ -4,18 +4,19 @@ class Constants {
       "title": "Kosan Nyaman",
       "subtitle":
           "Ala Kosan menyediakan berbagai kosan yang nyaman dan sudah direview dengan baik",
-      "image": "assets/images/onboard-comfort-kos.png",
+      "image": "assets/lotties/comfort.json",
     },
     {
       "title": "Kemudahan Pencarian",
-      "subtitle": "Gunakan fitur pencarian untuk Kosan yang lebih spesifik",
-      "image": "assets/images/onboard-search-kos.png",
+      "subtitle":
+          "Gunakan fitur pencarian untuk Lokasi Kosan yang lebih spesifik",
+      "image": "assets/lotties/search.json",
     },
     {
       "title": "Harga Bersahabat",
       "subtitle":
-          "Berbagai Kosan dengan harga yang bersahabat dari semua kalangan",
-      "image": "assets/images/onboard-save-money.png",
+          "Berbagai Kosan dengan harga yang bersahabat untuk semua kalangan",
+      "image": "assets/lotties/money.json",
     },
   ];
 

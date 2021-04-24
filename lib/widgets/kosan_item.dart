@@ -8,6 +8,7 @@ import 'package:ala_kosan/widgets/favorite_icon_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import 'chip_type.dart';
@@ -108,9 +109,8 @@ class KosanItem extends StatelessWidget {
               fit: BoxFit.cover,
               width: 120,
               height: double.infinity,
-              placeholder: (context, url) => Image.asset(
-                "assets/images/placeholder.png",
-                fit: BoxFit.cover,
+              placeholder: (context, url) => LottieBuilder.asset(
+                "assets/lotties/placeholder.json",
                 width: 120,
               ),
             ),

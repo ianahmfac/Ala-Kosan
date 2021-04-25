@@ -6,12 +6,14 @@ class UserApp {
   final String email;
   final String imageUrl;
   final String phoneNumber;
+  final int balance;
   UserApp({
     @required this.id,
     @required this.name,
     @required this.email,
     this.imageUrl,
     @required this.phoneNumber,
+    this.balance = 0,
   });
 
   UserApp copyWith({
@@ -20,6 +22,7 @@ class UserApp {
     String email,
     String imageUrl,
     String phoneNumber,
+    int balance,
   }) {
     return UserApp(
       id: id ?? this.id,
@@ -27,6 +30,7 @@ class UserApp {
       email: email ?? this.email,
       imageUrl: imageUrl ?? this.imageUrl,
       phoneNumber: phoneNumber ?? this.phoneNumber,
+      balance: balance ?? this.balance,
     );
   }
 }

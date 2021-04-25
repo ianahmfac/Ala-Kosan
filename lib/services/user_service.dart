@@ -12,6 +12,7 @@ class UserService {
       "name": user.name,
       "phoneNumber": user.phoneNumber,
       "imageUrl": user.imageUrl ?? "",
+      "balance": user.balance,
     });
   }
 
@@ -24,6 +25,7 @@ class UserService {
       email: user["email"],
       phoneNumber: user["phoneNumber"],
       imageUrl: user["imageUrl"],
+      balance: user["balance"],
     );
   }
 

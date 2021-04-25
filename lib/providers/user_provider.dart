@@ -8,7 +8,7 @@ class UserProvider with ChangeNotifier {
 
   UserApp get user => _user;
 
-  void getCurrentUser() async {
+  Future<void> getCurrentUser() async {
     _user = await UserService.getUser(AuthService.currentUid);
     notifyListeners();
   }

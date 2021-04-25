@@ -4,6 +4,7 @@ import 'package:ala_kosan/helpers/constants.dart';
 import 'package:ala_kosan/helpers/static_map.dart';
 import 'package:ala_kosan/models/kosan.dart';
 import 'package:ala_kosan/models/user_app.dart';
+import 'package:ala_kosan/pages/payment/order_summary.dart';
 import 'package:ala_kosan/providers/kosan_provider.dart';
 import 'package:ala_kosan/providers/user_provider.dart';
 import 'package:ala_kosan/shared/device.dart';
@@ -36,6 +37,7 @@ class _DetailKosState extends State<DetailKos> {
   int _indexImage = 0;
   String _mapUrl;
   Future<UserApp> _owner;
+  bool _isLoading = false;
 
   @override
   void didChangeDependencies() {
@@ -133,6 +135,7 @@ class _DetailKosState extends State<DetailKos> {
         children: [
           Expanded(
             child: CustomScrollView(
+              physics: ClampingScrollPhysics(),
               slivers: [
                 SliverAppBar(
                   brightness: Brightness.dark,
@@ -298,7 +301,9 @@ class _DetailKosState extends State<DetailKos> {
             SizedBox(width: 8),
             Expanded(
               child: Text(
-                "${kosan.availableRoom} kamar tersedia",
+                kosan.availableRoom > 0
+                    ? "${kosan.availableRoom} kamar tersedia"
+                    : "Kamar penuh yaa..",
                 style: TextStyle(
                   color: kosan.availableRoom < 3 ? Colors.red : Colors.green,
                 ),
@@ -320,10 +325,10 @@ class _DetailKosState extends State<DetailKos> {
         ),
         SizedBox(height: 8),
         Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(EvaIcons.pinOutline, size: 32),
-            SizedBox(width: 12),
+            Icon(EvaIcons.pinOutline, size: 24),
+            SizedBox(width: 8),
             Expanded(
               child: Text(
                 kosan.address,
@@ -370,9 +375,10 @@ class _DetailKosState extends State<DetailKos> {
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: FadeInImage(
-                placeholder: AssetImage("assets/images/placeholder.png"),
-                image: NetworkImage(_mapUrl),
+              child: CachedNetworkImage(
+                imageUrl: _mapUrl,
+                placeholder: (context, url) =>
+                    LottieBuilder.asset("assets/lotties/placeholder.json"),
                 fit: BoxFit.cover,
                 height: 200,
                 width: double.infinity,
@@ -416,12 +422,37 @@ class _DetailKosState extends State<DetailKos> {
                 ),
               ),
               SizedBox(
-                height: 50,
+                height: 45,
                 width: widthOfDevice(context) * 0.35,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text("Book Now"),
-                ),
+                child: _isLoading
+                    ? Center(
+                        child: SpinKitFadingCircle(
+                          color: accentColor,
+                        ),
+                      )
+                    : ElevatedButton(
+                        onPressed: kosan.availableRoom > 0
+                            ? () async {
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                await Provider.of<KosanProvider>(context,
+                                        listen: false)
+                                    .getKosan();
+                                await Provider.of<UserProvider>(context,
+                                        listen: false)
+                                    .getCurrentUser();
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                                Navigator.of(context).pushNamed(
+                                  OrderSummary.routeName,
+                                  arguments: kosan.id,
+                                );
+                              }
+                            : null,
+                        child: Text("Book Now"),
+                      ),
               ),
             ],
           ),

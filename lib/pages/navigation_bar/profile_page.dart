@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -21,68 +21,72 @@ class ProfilePage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: ListView(
-        physics: ClampingScrollPhysics(),
-        children: [
-          _buildProfileContainer(user, context),
-          _buildContentTitle(context, "Kosan Ku"),
-          Column(
-            children: [
-              _buildListSetting(
-                EvaIcons.creditCardOutline,
-                "Saldo Ala Kosan",
-                () {},
-                "(${convertCurrency(user.balance)})",
-              ),
-              _buildListSetting(
-                EvaIcons.homeOutline,
-                "Kelola Kosan Ku",
-                () {},
-                null,
-              ),
-            ],
-          ),
-          _buildContentTitle(context, "About"),
-          Column(
-            children: [
-              _buildListSetting(
-                EvaIcons.smartphoneOutline,
-                "Tentang Aplikasi",
-                () {},
-                null,
-              ),
-              _buildListSetting(
-                EvaIcons.codeOutline,
-                "Ikuti Developer",
-                () {},
-                null,
-              ),
-              _buildListSetting(
-                EvaIcons.shareOutline,
-                "Bagikan Ala Kosan",
-                () {},
-                null,
-              ),
-            ],
-          ),
-          _buildContentTitle(context, "Authentication"),
-          _buildListSetting(
-            EvaIcons.logOutOutline,
-            "Sign Out",
-            () {
-              context.read<UserProvider>().userSignOut();
-              context.read<KosanProvider>().userSignOut();
-              context.read<CityProvider>().userSignOut();
-              AuthService.signOut();
-            },
-            null,
-            false,
-          ),
-          Container(
-            height: 32,
-            color: Theme.of(context).scaffoldBackgroundColor,
-          ),
-        ],
+      body: RefreshIndicator(
+        onRefresh: () =>
+            Provider.of<UserProvider>(context, listen: false).getCurrentUser(),
+        child: ListView(
+          physics: ClampingScrollPhysics(),
+          children: [
+            _buildProfileContainer(user, context),
+            _buildContentTitle(context, "Kosan Ku"),
+            Column(
+              children: [
+                _buildListSetting(
+                  EvaIcons.creditCardOutline,
+                  "Saldo Ku",
+                  () {},
+                  "(${convertCurrency(user.balance)})",
+                ),
+                _buildListSetting(
+                  EvaIcons.homeOutline,
+                  "Kelola Kosan Ku",
+                  () {},
+                  null,
+                ),
+              ],
+            ),
+            _buildContentTitle(context, "About"),
+            Column(
+              children: [
+                _buildListSetting(
+                  EvaIcons.smartphoneOutline,
+                  "Tentang Aplikasi",
+                  () {},
+                  null,
+                ),
+                _buildListSetting(
+                  EvaIcons.codeOutline,
+                  "Ikuti Developer",
+                  () {},
+                  null,
+                ),
+                _buildListSetting(
+                  EvaIcons.shareOutline,
+                  "Bagikan Ala Kosan",
+                  () {},
+                  null,
+                ),
+              ],
+            ),
+            _buildContentTitle(context, "Authentication"),
+            _buildListSetting(
+              EvaIcons.logOutOutline,
+              "Sign Out",
+              () {
+                context.read<UserProvider>().userSignOut();
+                context.read<KosanProvider>().userSignOut();
+                context.read<CityProvider>().userSignOut();
+                AuthService.signOut();
+              },
+              null,
+              false,
+            ),
+            Container(
+              height: 32,
+              color: Theme.of(context).scaffoldBackgroundColor,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -126,7 +130,7 @@ class ProfilePage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
       child: Column(
         children: [
-          UserCircleAvatar(imageUrl: user.imageUrl, circleRadius: 50),
+          UserCircleAvatar(imageUrl: user.imageUrl ?? "", circleRadius: 50),
           SizedBox(height: 8),
           Text(
             user.name,

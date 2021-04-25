@@ -27,24 +27,29 @@ class HomePage extends StatelessWidget {
         elevation: 0,
         flexibleSpace: _buildHelloUser(user),
       ),
-      body: SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(user, context),
-            SizedBox(height: 16),
-            _buildTitleSection(context, "Yuk, Cari di Kota Ini!", () {}, false),
-            SizedBox(height: 8),
-            _buildCityCard(),
-            SizedBox(height: 16),
-            _buildTitleSection(context, "Rekomendasi Untukmu!", () {
-              Navigator.of(context).pushNamed(ListKos.routeName);
-            }),
-            SizedBox(height: 8),
-            _listOfKosan(),
-            SizedBox(height: 16),
-          ],
+      body: RefreshIndicator(
+        onRefresh: () =>
+            Provider.of<KosanProvider>(context, listen: false).getKosan(),
+        child: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(user, context),
+              SizedBox(height: 16),
+              _buildTitleSection(
+                  context, "Yuk, Cari di Kota Ini!", () {}, false),
+              SizedBox(height: 8),
+              _buildCityCard(),
+              SizedBox(height: 16),
+              _buildTitleSection(context, "Rekomendasi Untukmu!", () {
+                Navigator.of(context).pushNamed(ListKos.routeName);
+              }),
+              SizedBox(height: 8),
+              _listOfKosan(),
+              SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
     );

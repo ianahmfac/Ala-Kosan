@@ -7,12 +7,12 @@ class UserCircleAvatar extends StatelessWidget {
   final double circleRadius;
   final bool isOnPrimaryColor;
 
-  const UserCircleAvatar(
-      {Key key,
-      @required this.imageUrl,
-      this.circleRadius,
-      this.isOnPrimaryColor = false})
-      : super(key: key);
+  const UserCircleAvatar({
+    Key key,
+    @required this.imageUrl,
+    this.circleRadius,
+    this.isOnPrimaryColor = false,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final imageNull = imageUrl == "";

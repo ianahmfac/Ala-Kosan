@@ -1,11 +1,11 @@
 import 'package:ala_kosan/pages/auth/login_page.dart';
 import 'package:ala_kosan/pages/navigation_bar_page.dart';
 import 'package:ala_kosan/pages/onboard_screen.dart';
-import 'package:ala_kosan/services/auth_service.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Wrapper extends StatelessWidget {
@@ -26,21 +26,17 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
+    print(user);
     return FutureBuilder<bool>(
       future: _isFirst(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return snapshot.data
               ? OnboardScreen()
-              : StreamBuilder<User>(
-                  stream: AuthService.userSignIn,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return NavigationBarPage();
-                    }
-                    return LoginPage();
-                  },
-                );
+              : user != null
+                  ? NavigationBarPage()
+                  : LoginPage();
         }
         return _loading;
       },

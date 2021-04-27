@@ -161,11 +161,11 @@ class _SignInFormState extends State<SignInForm> {
               ? Center(
                   child: SpinKitFadingCircle(
                     color: accentColor,
-                    size: 40,
+                    size: 45,
                   ),
                 )
               : SizedBox(
-                  height: 40,
+                  height: 45,
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: _signIn,
@@ -179,7 +179,7 @@ class _SignInFormState extends State<SignInForm> {
           SizedBox(height: 16),
           if (!_isLoading)
             SizedBox(
-              height: 40,
+              height: 45,
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () =>

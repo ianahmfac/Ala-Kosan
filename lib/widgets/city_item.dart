@@ -60,9 +60,7 @@ class CityItem extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              fontSize: 16,
-                              color: primaryColor,
-                              fontWeight: FontWeight.w600),
+                              color: primaryColor, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],

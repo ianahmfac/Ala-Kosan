@@ -33,16 +33,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.9.0
   flutter_native_splash: ^1.1.7+1
 
-flutter_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/images/icon_app.png"
-
 flutter_native_splash:
-  color: "#FFFFFF"
+  color: "#FF5252"
   image: assets/images/logo_app.png
   android: true
   ios: true

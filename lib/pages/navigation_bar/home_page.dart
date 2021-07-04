@@ -88,7 +88,8 @@ class HomePage extends StatelessWidget {
             child: Text(
               title,
               style: contentTitle(context).copyWith(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
+                fontSize: 18,
               ),
             ),
           ),
@@ -157,7 +158,9 @@ class HomePage extends StatelessWidget {
             SizedBox(width: 8),
             Expanded(
               child: Text(
-                user != null ? "Hi, ${user.name}" : "Loading user name...",
+                user != null
+                    ? "Hi, ${user.name.split(' ').first}"
+                    : "Loading user name...",
                 maxLines: 1,
                 style: TextStyle(
                   color: Colors.white,
@@ -166,10 +169,9 @@ class HomePage extends StatelessWidget {
               ),
             ),
             SizedBox(width: 8),
-            Image.asset(
-              "assets/images/logo_app_secondary.png",
-              height: 20,
-              width: 20,
+            Icon(
+              Icons.home_filled,
+              color: Colors.white,
             ),
           ],
         ),

@@ -1,7 +1,6 @@
 import 'package:ala_kosan/helpers/constants.dart';
 import 'package:ala_kosan/pages/auth/signup_page.dart';
 import 'package:ala_kosan/services/auth_service.dart';
-import 'package:ala_kosan/shared/device.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/shared/utils.dart';
 import 'package:ala_kosan/widgets/container_form.dart';
@@ -23,10 +22,20 @@ class LoginPage extends StatelessWidget {
             children: [
               SafeArea(
                 bottom: false,
-                child: Image.asset(
-                  "assets/images/logo_app.png",
-                  height: heightOfDevice(context) * 0.25,
-                  width: double.infinity,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Icon(
+                      Icons.home_filled,
+                      color: primaryColor,
+                      size: 40,
+                    ),
+                    Text(
+                      'Ala Kosan',
+                      style:
+                          contentTitle(context).copyWith(color: primaryColor),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 32),

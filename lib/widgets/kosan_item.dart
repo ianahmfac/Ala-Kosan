@@ -52,7 +52,8 @@ class KosanItem extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: contentTitle(context).copyWith(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
                     ),
                   ),
                   SizedBox(height: 4),

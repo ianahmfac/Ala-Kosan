@@ -195,7 +195,7 @@ class _DetailKosState extends State<DetailKos> {
                       children: [
                         Text(
                           "Info Tambahan",
-                          style: contentTitle(context),
+                          style: contentBody(context),
                         ),
                         SizedBox(height: 4),
                         Text(
@@ -227,7 +227,7 @@ class _DetailKosState extends State<DetailKos> {
       children: [
         Text(
           "Fasilitas Utama",
-          style: contentTitle(context),
+          style: contentBody(context),
         ),
         SizedBox(height: 4),
         FacilityItem(
@@ -241,7 +241,7 @@ class _DetailKosState extends State<DetailKos> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Pemilik Kos", style: contentTitle(context)),
+        Text("Pemilik Kos", style: contentBody(context)),
         SizedBox(height: 4),
         Card(
           elevation: 6,
@@ -288,7 +288,7 @@ class _DetailKosState extends State<DetailKos> {
         Text(
           kosan.name,
           style: contentTitle2(context).copyWith(
-            fontSize: 24,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -321,7 +321,7 @@ class _DetailKosState extends State<DetailKos> {
       children: [
         Text(
           "Lokasi Kosan",
-          style: contentTitle(context),
+          style: contentBody(context),
         ),
         SizedBox(height: 8),
         Row(

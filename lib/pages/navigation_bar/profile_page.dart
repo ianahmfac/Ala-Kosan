@@ -132,16 +132,19 @@ class ProfilePage extends StatelessWidget {
         children: [
           UserCircleAvatar(imageUrl: user.imageUrl ?? "", circleRadius: 50),
           SizedBox(height: 8),
-          Text(
-            user.name,
-            style: onBoardTitle(context),
-            maxLines: 1,
-            overflow: TextOverflow.clip,
+          FittedBox(
+            child: Text(
+              user.name,
+              style: onBoardTitle(context),
+              textAlign: TextAlign.center,
+            ),
           ),
           SizedBox(height: 2),
-          Text(
-            user.email,
-            style: onBoardSubtitle(context),
+          FittedBox(
+            child: Text(
+              user.email,
+              style: onBoardSubtitle(context),
+            ),
           ),
           SizedBox(height: 8),
           ElevatedButton.icon(
@@ -159,12 +162,13 @@ class ProfilePage extends StatelessWidget {
 
   Widget _buildTitleAppBar(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Image.asset(
-          "assets/images/logo_app.png",
-          width: 25,
+        Icon(
+          Icons.home_filled,
+          color: primaryColor,
+          size: 35,
         ),
-        SizedBox(width: 8),
         Text(
           "Ala Kosan",
           style: contentTitle(context).copyWith(color: primaryColor),

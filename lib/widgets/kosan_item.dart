@@ -75,7 +75,7 @@ class KosanItem extends StatelessWidget {
                   Spacer(),
                   RichText(
                     text: TextSpan(
-                      text: convertCurrency(kosanItem.price),
+                      text: convertCurrency((kosanItem.price).toDouble()),
                       style: contentBody(context).copyWith(
                         fontWeight: FontWeight.bold,
                         color: primaryColor,

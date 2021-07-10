@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-String convertCurrency(int price) {
+String convertCurrency(double price) {
   return NumberFormat.currency(
     locale: "id-ID",
     decimalDigits: 0,

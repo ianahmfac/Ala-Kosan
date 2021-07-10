@@ -393,7 +393,7 @@ class _DetailKosState extends State<DetailKos> {
                 child: Container(
                   child: RichText(
                     text: TextSpan(
-                      text: convertCurrency(kosan.price),
+                      text: convertCurrency((kosan.price).toDouble()),
                       style: contentTitle(context).copyWith(
                         fontWeight: FontWeight.bold,
                         color: primaryColor,

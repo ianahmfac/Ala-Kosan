@@ -36,7 +36,7 @@ class ProfilePage extends StatelessWidget {
                   EvaIcons.creditCardOutline,
                   "Saldo Ku",
                   () {},
-                  "(${convertCurrency(user.balance)})",
+                  "(${convertCurrency((user.balance).toDouble())})",
                 ),
                 _buildListSetting(
                   EvaIcons.homeOutline,

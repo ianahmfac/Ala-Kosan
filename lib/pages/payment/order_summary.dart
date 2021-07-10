@@ -30,9 +30,9 @@ class _OrderSummaryState extends State<OrderSummary> {
     final kos =
         Provider.of<KosanProvider>(context, listen: false).findKosanById(_id);
     return Scaffold(
-      appBar: CupertinoNavigationBar(
-        middle: Text("Order Summary"),
-        previousPageTitle: "Back",
+      appBar: AppBar(
+        title: Text('Order Summary'),
+        brightness: Brightness.dark,
       ),
       body: ListView(
         children: [
@@ -58,22 +58,34 @@ class _OrderSummaryState extends State<OrderSummary> {
                     children: [
                       Text(
                         kos.name,
-                        style: contentTitle(context),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: contentTitle(context).copyWith(fontSize: 18),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        kos.address,
+                        style: TextStyle(color: Colors.grey),
                       ),
                       Spacer(),
                       Row(
                         children: [
-                          Container(
-                            height: 25,
-                            width: 25,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: primaryColor,
-                            ),
-                            child: Icon(
-                              EvaIcons.minus,
-                              color: Colors.white,
-                              size: 16,
+                          InkWell(
+                            onTap: _month == 1
+                                ? null
+                                : () {
+                                    setState(() {
+                                      _month--;
+                                    });
+                                  },
+                            child: CircleAvatar(
+                              backgroundColor:
+                                  _month == 1 ? Colors.grey : primaryColor,
+                              radius: 14,
+                              child: Icon(
+                                EvaIcons.minus,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                           SizedBox(width: 8),
@@ -82,17 +94,19 @@ class _OrderSummaryState extends State<OrderSummary> {
                             style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                           SizedBox(width: 8),
-                          Container(
-                            height: 25,
-                            width: 25,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: primaryColor,
-                            ),
-                            child: Icon(
-                              EvaIcons.plus,
-                              color: Colors.white,
-                              size: 16,
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                _month++;
+                              });
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: primaryColor,
+                              radius: 14,
+                              child: Icon(
+                                EvaIcons.plus,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ],

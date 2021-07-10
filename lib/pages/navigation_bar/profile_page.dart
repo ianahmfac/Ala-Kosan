@@ -3,6 +3,7 @@ import 'package:ala_kosan/providers/city_provider.dart';
 import 'package:ala_kosan/providers/kosan_provider.dart';
 import 'package:ala_kosan/providers/user_provider.dart';
 import 'package:ala_kosan/services/auth_service.dart';
+import 'package:ala_kosan/shared/platform_alert_dialog.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/shared/utils.dart';
 import 'package:ala_kosan/widgets/user_circle_avatar.dart';
@@ -72,11 +73,19 @@ class ProfilePage extends StatelessWidget {
             _buildListSetting(
               EvaIcons.logOutOutline,
               "Sign Out",
-              () {
-                context.read<UserProvider>().userSignOut();
-                context.read<KosanProvider>().userSignOut();
-                context.read<CityProvider>().userSignOut();
-                AuthService.signOut();
+              () async {
+                final isConfirmed = await PlatformAlertDialog(
+                  titleText: 'Sign Out',
+                  contentText: 'Apakah ingin keluar dari akun ini?',
+                  buttonDialogText: 'Sign Out',
+                  cancelButtonDialogText: 'Cancel',
+                ).show(context);
+                if (isConfirmed) {
+                  context.read<UserProvider>().userSignOut();
+                  context.read<KosanProvider>().userSignOut();
+                  context.read<CityProvider>().userSignOut();
+                  AuthService.signOut();
+                }
               },
               null,
               false,

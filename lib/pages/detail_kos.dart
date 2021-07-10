@@ -8,6 +8,7 @@ import 'package:ala_kosan/pages/payment/order_summary.dart';
 import 'package:ala_kosan/providers/kosan_provider.dart';
 import 'package:ala_kosan/providers/user_provider.dart';
 import 'package:ala_kosan/shared/device.dart';
+import 'package:ala_kosan/shared/platform_alert_dialog.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/shared/utils.dart';
 import 'package:ala_kosan/widgets/chip_type.dart';
@@ -345,33 +346,20 @@ class _DetailKosState extends State<DetailKos> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: InkWell(
-            onTap: () {
-              showAlert(
-                context,
-                child: CupertinoAlertDialog(
-                  title: Text("Ingin membuka MAPS?"),
-                  actions: [
-                    CupertinoButton(
-                      child: Text(
-                        "Cancel",
-                        style: TextStyle(color: primaryColor),
-                      ),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                    CupertinoButton(
-                      child: Text("Open Maps"),
-                      onPressed: () {
-                        try {
-                          Navigator.pop(context);
-                          _launchMap(kosan.latitude, kosan.longitude);
-                        } catch (e) {
-                          showSnackbarError(context, e.toString());
-                        }
-                      },
-                    ),
-                  ],
-                ),
-              );
+            onTap: () async {
+              final isConfirmed = await PlatformAlertDialog(
+                titleText: 'Buka Maps',
+                contentText: 'Apakah ingin membuka aplikasi maps?',
+                buttonDialogText: 'Open Maps',
+                cancelButtonDialogText: 'Cancel',
+              ).show(context);
+              if (isConfirmed) {
+                try {
+                  _launchMap(kosan.latitude, kosan.longitude);
+                } catch (e) {
+                  showSnackbarError(context, e.toString());
+                }
+              }
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),

@@ -11,13 +11,6 @@ String convertCurrency(int price) {
   ).format(price);
 }
 
-void showAlert(BuildContext context, {@required child}) {
-  showCupertinoDialog(
-    context: context,
-    builder: (context) => child,
-  );
-}
-
 void statusBarBrightness({@required bool isDark}) {
   SystemChrome.setSystemUIOverlayStyle(
       isDark ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light);

@@ -1,5 +1,6 @@
 import 'package:ala_kosan/models/kosan.dart';
 import 'package:ala_kosan/models/user_app.dart';
+import 'package:ala_kosan/pages/payment/pin_input_page.dart';
 import 'package:ala_kosan/providers/kosan_provider.dart';
 import 'package:ala_kosan/providers/user_provider.dart';
 import 'package:ala_kosan/shared/device.dart';
@@ -84,7 +85,9 @@ class _OrderSummaryState extends State<OrderSummary> {
             onPressed: user.balance.toDouble() >
                     (_month * kos.price).toDouble() +
                         (_month * kos.price) * 0.05
-                ? () {}
+                ? () {
+                    Navigator.of(context).pushNamed(PinInputPage.routeName);
+                  }
                 : null,
             icon: Icon(EvaIcons.creditCard),
             label: Text("Book Now"),

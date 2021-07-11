@@ -7,10 +7,12 @@ class UserApp {
   final String imageUrl;
   final String phoneNumber;
   final int balance;
+  final String pin;
   UserApp({
     @required this.id,
     @required this.name,
     @required this.email,
+    @required this.pin,
     this.imageUrl,
     @required this.phoneNumber,
     this.balance = 0,
@@ -31,6 +33,7 @@ class UserApp {
       imageUrl: imageUrl ?? this.imageUrl,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       balance: balance ?? this.balance,
+      pin: pin ?? this.pin,
     );
   }
 }

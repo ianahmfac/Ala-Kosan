@@ -31,6 +31,7 @@ class AuthService {
         email: email,
         phoneNumber: phoneNumber,
         imageUrl: imageUrl,
+        pin: "", //TODO PIN
       );
       UserService.setUser(user);
     } on FirebaseAuthException catch (e) {

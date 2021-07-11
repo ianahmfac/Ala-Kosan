@@ -13,6 +13,7 @@ class UserService {
       "phoneNumber": user.phoneNumber,
       "imageUrl": user.imageUrl ?? "",
       "balance": user.balance,
+      "pin": user.pin,
     });
   }
 
@@ -26,6 +27,7 @@ class UserService {
       phoneNumber: user["phoneNumber"],
       imageUrl: user["imageUrl"],
       balance: user["balance"],
+      pin: user["pin"],
     );
   }
 

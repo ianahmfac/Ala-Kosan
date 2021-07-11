@@ -5,6 +5,7 @@ import 'package:ala_kosan/shared/platform_alert_dialog.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/shared/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,7 @@ class _PinInputPageState extends State<PinInputPage> {
   final _pinPutController = TextEditingController();
   final _pinPutFocusNode = FocusNode();
   Transaction _transaction;
+  bool _stateLoading = false;
 
   @override
   void didChangeDependencies() {
@@ -78,7 +80,6 @@ class _PinInputPageState extends State<PinInputPage> {
                 return 'NOT VALID';
               },
               useNativeKeyboard: false,
-              // autovalidateMode: AutovalidateMode.onUserInteraction,
               withCursor: true,
               fieldsCount: 6,
               obscureText: "●",
@@ -103,34 +104,54 @@ class _PinInputPageState extends State<PinInputPage> {
             ),
           ),
           SizedBox(height: 30),
-          GridView.count(
-            crossAxisCount: 3,
-            shrinkWrap: true,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            padding: const EdgeInsets.all(30),
-            physics: NeverScrollableScrollPhysics(),
-            children: [
-              ...[1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0].map((e) {
-                if (e == '') return Container();
-                return RoundedButton(
-                  title: '$e',
-                  onTap: () {
-                    _pinPutController.text = '${_pinPutController.text}$e';
-                  },
-                );
-              }),
-              RoundedButton(
-                title: '←',
-                onTap: () {
-                  if (_pinPutController.text.isNotEmpty) {
-                    _pinPutController.text = _pinPutController.text
-                        .substring(0, _pinPutController.text.length - 1);
-                  }
-                },
-              ),
-            ],
-          ),
+          _stateLoading
+              ? Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SpinKitFadingCircle(
+                        color: accentColor,
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'Processing Transaction...',
+                        textAlign: TextAlign.center,
+                        style:
+                            contentTitle(context).copyWith(color: accentColor),
+                      )
+                    ],
+                  ),
+                )
+              : GridView.count(
+                  crossAxisCount: 3,
+                  shrinkWrap: true,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  padding: const EdgeInsets.all(30),
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [
+                    ...[1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0].map((e) {
+                      if (e == '') return Container();
+                      return RoundedButton(
+                        title: '$e',
+                        onTap: () {
+                          _pinPutController.text =
+                              '${_pinPutController.text}$e';
+                        },
+                      );
+                    }),
+                    RoundedButton(
+                      title: '←',
+                      onTap: () {
+                        if (_pinPutController.text.isNotEmpty) {
+                          _pinPutController.text = _pinPutController.text
+                              .substring(0, _pinPutController.text.length - 1);
+                        }
+                      },
+                    ),
+                  ],
+                ),
         ],
       ),
     );
@@ -162,22 +183,48 @@ class _PinInputPageState extends State<PinInputPage> {
   }
 
   void _submitTransaction(String pin) async {
+    setState(() {
+      _stateLoading = true;
+    });
+    print("FIRST");
+    await Provider.of<UserProvider>(context, listen: false).getCurrentUser();
     final user = Provider.of<UserProvider>(context, listen: false).user;
     final encryptedPin = TextEncrypter.encryptText(pin);
     if (user.balance >= _transaction.totalPrice) {
+      print("FIRST ENCRYPTED");
       if (user.pin == encryptedPin) {
+        print("INSIDE ENCRYPTED");
         final newTransaction = _transaction.copyWith(
           id: "AlaKosan-${DateTime.now()}",
           createdAt: DateTime.now(),
         );
+        await PlatformAlertDialog(
+          titleText: '$newTransaction',
+          contentText: 'Contoh Berhasil',
+          buttonDialogText: 'OK',
+        ).show(context);
+        print("AFTER SUCCESS");
+        setState(() {
+          _stateLoading = false;
+        });
+        _pinPutController.text = '';
       } else {
-        PlatformAlertDialog(
+        print("INSIDE ELSE");
+        await PlatformAlertDialog(
           titleText: 'Transaksi Gagal',
           contentText: 'Pin kamu salah nih. Masukkan pin yang benar.',
           buttonDialogText: 'OK',
         ).show(context);
+        print("AFTER ELSE");
+        setState(() {
+          _stateLoading = false;
+        });
+        _pinPutController.text = '';
       }
     } else {
+      setState(() {
+        _stateLoading = false;
+      });
       await PlatformAlertDialog(
         titleText: 'Transaksi Gagal',
         contentText: 'Saldo kamu tidak cukup nih, yuk isi saldo kamu.',

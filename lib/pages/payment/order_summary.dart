@@ -26,11 +26,17 @@ class OrderSummary extends StatefulWidget {
 class _OrderSummaryState extends State<OrderSummary> {
   String _id;
   int _month = 1;
+  bool _isLoading = false;
+  UserApp _owner;
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     super.didChangeDependencies();
-    _id = ModalRoute.of(context).settings.arguments;
+    Map<String, String> args = ModalRoute.of(context).settings.arguments;
+    _id = args["kosanId"];
+    _owner = await Provider.of<UserProvider>(context, listen: false)
+        .getOwner(args["ownerId"]);
+    setState(() {});
   }
 
   @override
@@ -48,7 +54,7 @@ class _OrderSummaryState extends State<OrderSummary> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ..._kosanBooked(kos),
-            _customerInfo(context, kos),
+            _ownerInfo(context, kos),
             _buildContentTitle(context, "Detail Payment"),
             _buildTitleContentRow(
               "Harga $_month bulan",
@@ -84,50 +90,66 @@ class _OrderSummaryState extends State<OrderSummary> {
         padding: const EdgeInsets.fromLTRB(32, 16, 32, 32),
         child: SizedBox(
           height: 50,
-          child: OutlinedButton.icon(
-            onPressed: user.balance.toDouble() >=
-                    (_month * kos.price).toDouble() +
-                        (_month * kos.price) * 0.05
-                ? () async {
-                    await Provider.of<UserProvider>(context, listen: false)
-                        .getCurrentUser();
-                    final owner =
-                        await Provider.of<UserProvider>(context, listen: false)
-                            .getOwner(kos.ownerId);
-                    if (user.balance.toDouble() >=
-                        (_month * kos.price).toDouble() +
-                            (_month * kos.price) * 0.05) {
-                      final transaction = Transaction(
-                        id: "AlaKosan-${DateTime.now()}",
-                        kosanId: kos.id,
-                        kosanName: kos.name,
-                        kosanImageUrl: kos.images[0],
-                        kosanAddress: kos.address,
-                        month: _month,
-                        priceInAMonth: kos.price.toDouble(),
-                        totalPrice: (_month * kos.price).toDouble() +
-                            (_month * kos.price) * 0.05,
-                        ownerName: owner.name,
-                        ownerPhoneNumber: owner.phoneNumber,
-                        createdAt: DateTime.now(),
-                      );
-                      Navigator.of(context).pushNamed(
-                        PinInputPage.routeName,
-                        arguments: transaction,
-                      );
-                    } else {
-                      PlatformAlertDialog(
-                        titleText: 'Gagal Booking',
-                        contentText:
-                            'Saldo kamu tidak cukup nih, yuk isi saldo kamu.',
-                        buttonDialogText: 'OK',
-                      ).show(context);
-                    }
-                  }
-                : null,
-            icon: Icon(EvaIcons.creditCard),
-            label: Text("Book Now"),
-          ),
+          child: _isLoading
+              ? Center(
+                  child: SpinKitFadingCircle(
+                    color: accentColor,
+                  ),
+                )
+              : OutlinedButton.icon(
+                  onPressed: user.balance.toDouble() >=
+                          (_month * kos.price).toDouble() +
+                              (_month * kos.price) * 0.05
+                      ? () async {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          await Provider.of<UserProvider>(context,
+                                  listen: false)
+                              .getCurrentUser();
+                          final owner = await Provider.of<UserProvider>(context,
+                                  listen: false)
+                              .getOwner(kos.ownerId);
+                          if (user.balance.toDouble() >=
+                              (_month * kos.price).toDouble() +
+                                  (_month * kos.price) * 0.05) {
+                            final transaction = Transaction(
+                              id: "AlaKosan-${DateTime.now()}",
+                              kosanId: kos.id,
+                              kosanName: kos.name,
+                              kosanImageUrl: kos.images[0],
+                              kosanAddress: kos.address,
+                              month: _month,
+                              priceInAMonth: kos.price.toDouble(),
+                              totalPrice: (_month * kos.price).toDouble() +
+                                  (_month * kos.price) * 0.05,
+                              ownerName: owner.name,
+                              ownerPhoneNumber: owner.phoneNumber,
+                              createdAt: DateTime.now(),
+                            );
+                            setState(() {
+                              _isLoading = false;
+                            });
+                            Navigator.of(context).pushNamed(
+                              PinInputPage.routeName,
+                              arguments: transaction,
+                            );
+                          } else {
+                            setState(() {
+                              _isLoading = false;
+                            });
+                            PlatformAlertDialog(
+                              titleText: 'Gagal Booking',
+                              contentText:
+                                  'Saldo kamu tidak cukup nih, yuk isi saldo kamu.',
+                              buttonDialogText: 'OK',
+                            ).show(context);
+                          }
+                        }
+                      : null,
+                  icon: Icon(EvaIcons.creditCard),
+                  label: Text("Book Now"),
+                ),
         ),
       ),
     );
@@ -159,36 +181,24 @@ class _OrderSummaryState extends State<OrderSummary> {
     );
   }
 
-  Widget _customerInfo(BuildContext context, Kosan kos) {
+  Widget _ownerInfo(BuildContext context, Kosan kos) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _buildContentTitle(context, "Owner Info"),
-        FutureBuilder<UserApp>(
-            future: Provider.of<UserProvider>(context, listen: false)
-                .getOwner(kos.ownerId),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting)
-                return Center(
-                  child: SpinKitFadingCircle(
-                    color: accentColor,
-                    size: 50,
-                  ),
-                );
-              if (snapshot.hasData) {
-                final owner = snapshot.data;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildTitleandContent("Nama Pemilik", owner.name),
-                    _buildTitleandContent("Nomor HP", owner.phoneNumber),
-                  ],
-                );
-              }
-              return Center(
-                child: Text("Tidak ada data / Terjadi kesalahan"),
-              );
-            }),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTitleandContent(
+              "Nama Pemilik",
+              _owner != null ? _owner.name : "Loading...",
+            ),
+            _buildTitleandContent(
+              "Nomor HP",
+              _owner != null ? _owner.phoneNumber : "Loading...",
+            ),
+          ],
+        ),
         SizedBox(height: 8),
       ],
     );

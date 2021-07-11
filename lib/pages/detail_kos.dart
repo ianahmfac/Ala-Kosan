@@ -435,7 +435,10 @@ class _DetailKosState extends State<DetailKos> {
                                 });
                                 Navigator.of(context).pushNamed(
                                   OrderSummary.routeName,
-                                  arguments: kosan.id,
+                                  arguments: {
+                                    "kosanId": kosan.id,
+                                    "ownerId": kosan.ownerId,
+                                  },
                                 );
                               }
                             : null,

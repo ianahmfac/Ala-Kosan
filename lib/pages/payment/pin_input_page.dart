@@ -1,7 +1,12 @@
 import 'package:ala_kosan/helpers/text_encrypter.dart';
+import 'package:ala_kosan/models/transaction.dart';
+import 'package:ala_kosan/providers/user_provider.dart';
+import 'package:ala_kosan/shared/platform_alert_dialog.dart';
 import 'package:ala_kosan/shared/themes.dart';
+import 'package:ala_kosan/shared/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
+import 'package:provider/provider.dart';
 
 class PinInputPage extends StatefulWidget {
   static String routeName = "/pin-input-page";
@@ -14,15 +19,12 @@ class _PinInputPageState extends State<PinInputPage> {
   final _formKey = GlobalKey<FormState>();
   final _pinPutController = TextEditingController();
   final _pinPutFocusNode = FocusNode();
-
-  final List<Widget> _pinPuts = [];
+  Transaction _transaction;
 
   @override
-  void initState() {
-    _pinPuts.addAll([
-      onlySelectedBorderPinPut(),
-    ]);
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _transaction = ModalRoute.of(context).settings.arguments;
   }
 
   @override
@@ -85,7 +87,7 @@ class _PinInputPageState extends State<PinInputPage> {
               eachFieldMargin: EdgeInsets.all(0),
               eachFieldWidth: 45.0,
               eachFieldHeight: 55.0,
-              onSubmit: (String pin) => _showSnackBar(pin),
+              onSubmit: (String pin) => _submitTransaction(pin),
               focusNode: _pinPutFocusNode,
               controller: _pinPutController,
               submittedFieldDecoration: pinPutDecoration,
@@ -144,6 +146,12 @@ class _PinInputPageState extends State<PinInputPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             TextButton(
+              onPressed: null,
+              child: Text(
+                'Total Bayar: ${convertCurrency(_transaction.totalPrice)}',
+              ),
+            ),
+            TextButton(
               onPressed: () => _pinPutController.text = '',
               child: const Text('Clear All'),
             ),
@@ -153,24 +161,30 @@ class _PinInputPageState extends State<PinInputPage> {
     );
   }
 
-  void _showSnackBar(String pin) {
-    final newPin = TextEncrypter.encryptText(pin);
-    final snackBar = SnackBar(
-      duration: const Duration(seconds: 3),
-      content: Container(
-        height: 80.0,
-        child: Center(
-          child: Text(
-            'Pin Submitted. Value: $newPin',
-            style: const TextStyle(fontSize: 25.0),
-          ),
-        ),
-      ),
-      backgroundColor: Colors.deepPurpleAccent,
-    );
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(snackBar);
+  void _submitTransaction(String pin) async {
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+    final encryptedPin = TextEncrypter.encryptText(pin);
+    if (user.balance >= _transaction.totalPrice) {
+      if (user.pin == encryptedPin) {
+        final newTransaction = _transaction.copyWith(
+          id: "AlaKosan-${DateTime.now()}",
+          createdAt: DateTime.now(),
+        );
+      } else {
+        PlatformAlertDialog(
+          titleText: 'Transaksi Gagal',
+          contentText: 'Pin kamu salah nih. Masukkan pin yang benar.',
+          buttonDialogText: 'OK',
+        ).show(context);
+      }
+    } else {
+      await PlatformAlertDialog(
+        titleText: 'Transaksi Gagal',
+        contentText: 'Saldo kamu tidak cukup nih, yuk isi saldo kamu.',
+        buttonDialogText: 'OK',
+      ).show(context);
+      Navigator.of(context).pop();
+    }
   }
 }
 

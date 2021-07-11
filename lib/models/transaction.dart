@@ -9,7 +9,8 @@ class Transaction {
   int month;
   double priceInAMonth;
   double totalPrice;
-  String userId;
+  String ownerName;
+  String ownerPhoneNumber;
   DateTime createdAt;
   Transaction({
     @required this.id,
@@ -20,7 +21,8 @@ class Transaction {
     @required this.month,
     @required this.priceInAMonth,
     @required this.totalPrice,
-    @required this.userId,
+    @required this.ownerName,
+    @required this.ownerPhoneNumber,
     @required this.createdAt,
   });
 
@@ -33,7 +35,8 @@ class Transaction {
     int month,
     double priceInAMonth,
     double totalPrice,
-    String userId,
+    String ownerName,
+    String ownerPhoneNumber,
     DateTime createdAt,
   }) {
     return Transaction(
@@ -45,8 +48,9 @@ class Transaction {
       month: month ?? this.month,
       priceInAMonth: priceInAMonth ?? this.priceInAMonth,
       totalPrice: totalPrice ?? this.totalPrice,
-      userId: userId ?? this.userId,
-      createdAt: createdAt ?? this.userId,
+      ownerName: ownerName ?? this.ownerName,
+      ownerPhoneNumber: ownerPhoneNumber ?? this.ownerPhoneNumber,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -60,7 +64,8 @@ class Transaction {
       'month': month,
       'priceInAMonth': priceInAMonth,
       'totalPrice': totalPrice,
-      'userId': userId,
+      'ownerName': ownerName,
+      'ownerPhoneNumber': ownerPhoneNumber,
       'createdAt': createdAt.toIso8601String(),
     };
   }
@@ -75,7 +80,8 @@ class Transaction {
       month: map['month'],
       priceInAMonth: map['priceInAMonth'],
       totalPrice: map['totalPrice'],
-      userId: map['userId'],
+      ownerName: map['ownerName'],
+      ownerPhoneNumber: map['ownerPhoneNumber'],
       createdAt: DateTime.parse(map['createdAt']),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:ala_kosan/helpers/text_encrypter.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -153,13 +154,14 @@ class _PinInputPageState extends State<PinInputPage> {
   }
 
   void _showSnackBar(String pin) {
+    final newPin = TextEncrypter.encryptText(pin);
     final snackBar = SnackBar(
       duration: const Duration(seconds: 3),
       content: Container(
         height: 80.0,
         child: Center(
           child: Text(
-            'Pin Submitted. Value: $pin',
+            'Pin Submitted. Value: $newPin',
             style: const TextStyle(fontSize: 25.0),
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:ala_kosan/models/kosan.dart';
+import 'package:ala_kosan/models/transaction_model.dart';
 import 'package:ala_kosan/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -51,5 +52,23 @@ class KosanService {
       ));
     });
     return kosan;
+  }
+
+  static Future<void> setMyTransaction(TransactionModel transaction) async {
+    try {
+      await _collectionReference
+          .doc(transaction.kosanId)
+          .collection("transactions")
+          .doc(transaction.id)
+          .set(transaction.toMap());
+
+      await _collectionReference.doc(transaction.kosanId).update({
+        "availableRoom": transaction.availableRoom - 1,
+      });
+    } on FirebaseException catch (e) {
+      throw e.message.toString();
+    } catch (e) {
+      throw e.toString();
+    }
   }
 }

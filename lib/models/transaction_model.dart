@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class Transaction {
+class TransactionModel {
   String id;
   String kosanId;
   String kosanName;
@@ -11,8 +11,9 @@ class Transaction {
   double totalPrice;
   String ownerName;
   String ownerPhoneNumber;
+  int availableRoom;
   DateTime createdAt;
-  Transaction({
+  TransactionModel({
     @required this.id,
     @required this.kosanId,
     @required this.kosanName,
@@ -24,9 +25,10 @@ class Transaction {
     @required this.ownerName,
     @required this.ownerPhoneNumber,
     @required this.createdAt,
+    this.availableRoom,
   });
 
-  Transaction copyWith({
+  TransactionModel copyWith({
     String id,
     String kosanId,
     String kosanName,
@@ -37,9 +39,10 @@ class Transaction {
     double totalPrice,
     String ownerName,
     String ownerPhoneNumber,
+    int availableRoom,
     DateTime createdAt,
   }) {
-    return Transaction(
+    return TransactionModel(
       id: id ?? this.id,
       kosanId: kosanId ?? this.kosanId,
       kosanName: kosanName ?? this.kosanName,
@@ -50,6 +53,7 @@ class Transaction {
       totalPrice: totalPrice ?? this.totalPrice,
       ownerName: ownerName ?? this.ownerName,
       ownerPhoneNumber: ownerPhoneNumber ?? this.ownerPhoneNumber,
+      availableRoom: availableRoom ?? this.availableRoom,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -70,8 +74,8 @@ class Transaction {
     };
   }
 
-  factory Transaction.fromMap(Map<String, dynamic> map) {
-    return Transaction(
+  factory TransactionModel.fromMap(Map<String, dynamic> map) {
+    return TransactionModel(
       id: map['id'],
       kosanId: map['kosanId'],
       kosanName: map['kosanName'],

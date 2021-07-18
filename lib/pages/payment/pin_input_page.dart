@@ -1,6 +1,9 @@
 import 'package:ala_kosan/helpers/text_encrypter.dart';
-import 'package:ala_kosan/models/transaction.dart';
+import 'package:ala_kosan/models/transaction_model.dart';
+import 'package:ala_kosan/pages/payment/transaction_confirmed_page.dart';
 import 'package:ala_kosan/providers/user_provider.dart';
+import 'package:ala_kosan/services/kosan_service.dart';
+import 'package:ala_kosan/services/user_service.dart';
 import 'package:ala_kosan/shared/platform_alert_dialog.dart';
 import 'package:ala_kosan/shared/themes.dart';
 import 'package:ala_kosan/shared/utils.dart';
@@ -20,7 +23,7 @@ class _PinInputPageState extends State<PinInputPage> {
   final _formKey = GlobalKey<FormState>();
   final _pinPutController = TextEditingController();
   final _pinPutFocusNode = FocusNode();
-  Transaction _transaction;
+  TransactionModel _transaction;
   bool _stateLoading = false;
 
   @override
@@ -186,39 +189,42 @@ class _PinInputPageState extends State<PinInputPage> {
     setState(() {
       _stateLoading = true;
     });
-    print("FIRST");
     await Provider.of<UserProvider>(context, listen: false).getCurrentUser();
     final user = Provider.of<UserProvider>(context, listen: false).user;
     final encryptedPin = TextEncrypter.encryptText(pin);
     if (user.balance >= _transaction.totalPrice) {
-      print("FIRST ENCRYPTED");
       if (user.pin == encryptedPin) {
-        print("INSIDE ENCRYPTED");
-        final newTransaction = _transaction.copyWith(
-          id: "AlaKosan-${DateTime.now()}",
-          createdAt: DateTime.now(),
-        );
-        await PlatformAlertDialog(
-          titleText: '$newTransaction',
-          contentText: 'Contoh Berhasil',
-          buttonDialogText: 'OK',
-        ).show(context);
-        print("AFTER SUCCESS");
+        try {
+          final newTransaction = _transaction.copyWith(
+            id: "AlaKosan-${DateTime.now()}",
+            createdAt: DateTime.now(),
+          );
+          await UserService.setMyTransaction(newTransaction);
+          await KosanService.setMyTransaction(newTransaction);
+
+          setState(() {
+            _stateLoading = false;
+          });
+
+          Navigator.of(context)
+              .pushReplacementNamed(TransactionConfirmedPage.routeName);
+        } catch (e) {
+          PlatformAlertDialog(
+            titleText: 'Transaksi Gagal',
+            contentText: e.toString(),
+            buttonDialogText: 'OK',
+          ).show(context);
+          Navigator.of(context).pop();
+        }
+      } else {
         setState(() {
           _stateLoading = false;
         });
-        _pinPutController.text = '';
-      } else {
-        print("INSIDE ELSE");
         await PlatformAlertDialog(
           titleText: 'Transaksi Gagal',
           contentText: 'Pin kamu salah nih. Masukkan pin yang benar.',
           buttonDialogText: 'OK',
         ).show(context);
-        print("AFTER ELSE");
-        setState(() {
-          _stateLoading = false;
-        });
         _pinPutController.text = '';
       }
     } else {

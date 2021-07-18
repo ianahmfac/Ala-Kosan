@@ -1,5 +1,5 @@
 import 'package:ala_kosan/models/kosan.dart';
-import 'package:ala_kosan/models/transaction.dart';
+import 'package:ala_kosan/models/transaction_model.dart';
 import 'package:ala_kosan/models/user_app.dart';
 import 'package:ala_kosan/pages/payment/pin_input_page.dart';
 import 'package:ala_kosan/providers/kosan_provider.dart';
@@ -113,7 +113,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                           if (user.balance.toDouble() >=
                               (_month * kos.price).toDouble() +
                                   (_month * kos.price) * 0.05) {
-                            final transaction = Transaction(
+                            final transaction = TransactionModel(
                               id: "AlaKosan-${DateTime.now()}",
                               kosanId: kos.id,
                               kosanName: kos.name,
@@ -126,6 +126,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                               ownerName: owner.name,
                               ownerPhoneNumber: owner.phoneNumber,
                               createdAt: DateTime.now(),
+                              availableRoom: kos.availableRoom,
                             );
                             setState(() {
                               _isLoading = false;

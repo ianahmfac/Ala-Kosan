@@ -1,3 +1,4 @@
+import 'package:ala_kosan/models/transaction_model.dart';
 import 'package:ala_kosan/models/user_app.dart';
 import 'package:ala_kosan/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -50,5 +51,19 @@ class UserService {
     snapshot.docs
         .forEach((kos) => returnValue[kos.id] = kos.data()["favorite"]);
     return returnValue;
+  }
+
+  static Future<void> setMyTransaction(TransactionModel transaction) async {
+    try {
+      await _collectionReference
+          .doc(AuthService.currentUid)
+          .collection("transactions")
+          .doc(transaction.id)
+          .set(transaction.toMap());
+    } on FirebaseException catch (e) {
+      throw e.message.toString();
+    } catch (e) {
+      throw e.toString();
+    }
   }
 }

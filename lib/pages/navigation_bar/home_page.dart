@@ -25,6 +25,7 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         brightness: Brightness.dark,
         elevation: 0,
+        automaticallyImplyLeading: false,
         flexibleSpace: _buildHelloUser(user),
       ),
       body: RefreshIndicator(

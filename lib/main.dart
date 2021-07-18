@@ -5,6 +5,7 @@ import 'package:ala_kosan/pages/detail_kos.dart';
 import 'package:ala_kosan/pages/list_kos.dart';
 import 'package:ala_kosan/pages/payment/order_summary.dart';
 import 'package:ala_kosan/pages/payment/pin_input_page.dart';
+import 'package:ala_kosan/pages/payment/transaction_confirmed_page.dart';
 import 'package:ala_kosan/pages/wrapper.dart';
 import 'package:ala_kosan/providers/city_provider.dart';
 import 'package:ala_kosan/providers/kosan_provider.dart';
@@ -59,6 +60,8 @@ class MyApp extends StatelessWidget {
               CityListKos.routeName: (ctx) => CityListKos(),
               OrderSummary.routeName: (ctx) => OrderSummary(),
               PinInputPage.routeName: (ctx) => PinInputPage(),
+              TransactionConfirmedPage.routeName: (ctx) =>
+                  TransactionConfirmedPage(),
             },
           ),
         ),

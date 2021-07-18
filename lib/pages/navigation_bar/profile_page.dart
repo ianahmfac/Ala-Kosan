@@ -20,6 +20,7 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         title: _buildTitleAppBar(context),
         backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
         elevation: 0,
       ),
       body: RefreshIndicator(

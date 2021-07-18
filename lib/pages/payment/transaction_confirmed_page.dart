@@ -1,3 +1,4 @@
+import 'package:ala_kosan/pages/wrapper.dart';
 import 'package:flutter/material.dart';
 
 class TransactionConfirmedPage extends StatelessWidget {
@@ -5,21 +6,21 @@ class TransactionConfirmedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text("Transaksi Sewa Kosan Berhasil"),
-            SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacementNamed("/");
-              },
-              child: Text("Kembali ke Halaman Utama"),
-            ),
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text("Transaksi Sewa Kosan Berhasil"),
+          SizedBox(height: 8),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => Wrapper(),
+              ));
+            },
+            child: Text("Kembali ke Halaman Utama"),
+          ),
+        ],
       ),
     );
   }

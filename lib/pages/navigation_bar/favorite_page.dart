@@ -14,6 +14,7 @@ class FavoritePage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Favorite"),
         brightness: Brightness.dark,
+        automaticallyImplyLeading: false,
       ),
       body: RefreshIndicator(
         onRefresh: () =>

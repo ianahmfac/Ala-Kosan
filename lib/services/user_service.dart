@@ -60,6 +60,9 @@ class UserService {
           .collection("transactions")
           .doc(transaction.id)
           .set(transaction.toMap());
+      await _collectionReference.doc(AuthService.currentUid).update({
+        "balance": transaction.balance - transaction.totalPrice.toInt(),
+      });
     } on FirebaseException catch (e) {
       throw e.message.toString();
     } catch (e) {

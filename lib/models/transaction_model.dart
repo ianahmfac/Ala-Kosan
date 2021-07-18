@@ -13,20 +13,21 @@ class TransactionModel {
   String ownerPhoneNumber;
   int availableRoom;
   DateTime createdAt;
-  TransactionModel({
-    @required this.id,
-    @required this.kosanId,
-    @required this.kosanName,
-    @required this.kosanImageUrl,
-    @required this.kosanAddress,
-    @required this.month,
-    @required this.priceInAMonth,
-    @required this.totalPrice,
-    @required this.ownerName,
-    @required this.ownerPhoneNumber,
-    @required this.createdAt,
-    this.availableRoom,
-  });
+  int balance;
+  TransactionModel(
+      {@required this.id,
+      @required this.kosanId,
+      @required this.kosanName,
+      @required this.kosanImageUrl,
+      @required this.kosanAddress,
+      @required this.month,
+      @required this.priceInAMonth,
+      @required this.totalPrice,
+      @required this.ownerName,
+      @required this.ownerPhoneNumber,
+      @required this.createdAt,
+      this.availableRoom,
+      this.balance});
 
   TransactionModel copyWith({
     String id,
@@ -41,6 +42,7 @@ class TransactionModel {
     String ownerPhoneNumber,
     int availableRoom,
     DateTime createdAt,
+    int balance,
   }) {
     return TransactionModel(
       id: id ?? this.id,
@@ -55,6 +57,7 @@ class TransactionModel {
       ownerPhoneNumber: ownerPhoneNumber ?? this.ownerPhoneNumber,
       availableRoom: availableRoom ?? this.availableRoom,
       createdAt: createdAt ?? this.createdAt,
+      balance: balance ?? this.balance,
     );
   }
 

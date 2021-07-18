@@ -127,6 +127,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                               ownerPhoneNumber: owner.phoneNumber,
                               createdAt: DateTime.now(),
                               availableRoom: kos.availableRoom,
+                              balance: user.balance,
                             );
                             setState(() {
                               _isLoading = false;
